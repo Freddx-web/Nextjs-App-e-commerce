@@ -1,11 +1,6 @@
 /**
  * File: /home/ubuntu/ecommerce_app/nextjs_space/app/api/admin/stats/route.ts
  * Description: Endpoint para obtener las estadísticas del panel de administración
- * Author: Danny Lopez 
- * Date: 2026-01-05
- * Version: 1.0.0
- * License: MIT
- * Copyright: 2026
  */
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";

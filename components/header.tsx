@@ -55,7 +55,7 @@ export function Header() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="text-2xl font-bold text-[#60B5FF] hover:text-[#4A9FE8] transition-colors">
-            ShopHub
+            ShopMusic
           </Link>
 
           <nav className="flex items-center gap-4">
