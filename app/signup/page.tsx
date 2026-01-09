@@ -70,7 +70,7 @@ export default function SignupPage() {
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Crear Cuenta</h1>
-            <p className="text-gray-600 mt-2">Regístrate en ShopHub</p>
+            <p className="text-gray-600 mt-2">Regístrate en ShopMusic</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

@@ -11,14 +11,14 @@ export const dynamic = 'force-dynamic';
 // Metadata para la página
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
-  title: 'ShopHub - Tu Tienda Online',
+  title: 'ShopMusic - Tu Tienda Online',
   description: 'Tienda online moderna con los mejores productos',
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
   },
   openGraph: {
-    title: 'ShopHub - Tu Tienda Online',
+    title: 'ShopMusic - Tu Tienda Online',
     description: 'Tienda online moderna con los mejores productos',
     images: ['/og-image.png'],
   },
