@@ -3,260 +3,356 @@ import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
+// Product images organized by category
 const productImages = {
-  laptop_moderna: "https://images.unsplash.com/photo-1600195075831-b4d885c54371?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D",
-  smartphone_premium: "https://images.pexels.com/photos/25849099/pexels-photo-25849099.png?auto=compress&cs=tinysrgb&h=627&fit=crop&w=1200",
-  auriculares_bluetooth: "https://www.shutterstock.com/image-photo/black-wireless-overear-headphones-cushioned-600nw-2712106067.jpg",
-  camiseta_basica: "https://halsey44.com/wp-content/uploads/2022/05/Halsey44-PI3039-Liquid-Pima-Crew-Neck-Tee-front-flat-Cobalt_.jpg",
-  jeans_clasicos: "https://media.istockphoto.com/id/1281304280/photo/folded-blue-jeans-on-a-white-background-modern-casual-clothing-flat-lay-copy-space.jpg?s=612x612&w=0&k=20&c=nSMI2abaVovzkH1n0eXeJYCkrtI-6QcD_V7OVUz4zS4=",
-  zapatillas_deportivas: "https://media.istockphoto.com/id/1193036915/photo/white-sneaker-with-blue-accents-on-a-white-background-sports-shoes-for-an-active-lifestyle.jpg?s=1024x1024&w=is&k=20&c=UJJxgZKCjNrNl1_n_3t4D--dMC8s58XDiBael4h0CvY=",
-  lampara_moderna: "https://thumbs.dreamstime.com/b/foldable-rechargeable-table-lamp-minimalist-design-isolated-white-background-product-focused-visuals-368399774.jpg",
-  silla_oficina: "https://cdnimg.webstaurantstore.com/images/products/large/195476/694089.jpg",
-  mesa_madera: "https://media.istockphoto.com/id/578085396/photo/empty-wooden-table-top-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=dRnO45OkkGoZJ2EbIEkcTPsDZFoIvaKZfD2Ap2DPlTA=",
-  balon_futbol: "https://media.istockphoto.com/id/1064319716/photo/soccer-ball-isolated-on-white-background-black-and-white-football-ball.jpg?s=612x612&w=is&k=20&c=tBTtHCmkrx1fxlYJRFXnt22pwe_qUlaav_ef6uxg21s=",
-  raqueta_tenis: "https://media.istockphoto.com/id/1505246595/photo/tennis-racket-isolated-on-a-white-background.jpg?s=612x612&w=0&k=20&c=1wx3981ZQJEG1KHELJGoN6ppzs3Y8M1kF42gvrGQWKo=",
-  bicicleta_montana: "https://media.istockphoto.com/id/473271822/photo/blue-mountain-bike.jpg?s=612x612&w=0&k=20&c=b4i4mDgt0Abbao9xkyCyCfuU18wihU4Q6UGMD0wZFE8="
+  // MoskyAudio Products
+  moskyAudio_bright_flame_amp: "https://www.moskyaudio.com/Uploads/674fb86d9ce33.jpg",
+  moskyAudio_g_iii_blue_purple: "https://www.moskyaudio.com/Uploads/667d0e69a626e.jpg",
+  moskyAudio_overdrive_dolphin: "https://www.moskyaudio.com/Uploads/64632ad9ead27.jpg",
+  moskyAudio_lm741_preamp: "https://www.moskyaudio.com/Uploads/64632fa74e960.jpg",
+  moskyAudio_cosmic_blue: "https://www.moskyaudio.com/Uploads/64632f712b227.jpg",
+  moskyAudio_iso10_power_supply: "https://www.moskyaudio.com/Uploads/60da957db5fd0.jpg",
+  moskyAudio_sky_reverb_delay: "https://www.moskyaudio.com/Uploads/5fe45bc5363dd.jpg",
+  moskyAudio_sol918_multi_effects: "https://www.moskyaudio.com/Uploads/60da9377a8597.jpg",
+  moskyAudio_blue_ocean_chorus: "https://www.moskyaudio.com/Uploads/60da8feaaaca0.jpg",
+  moskyAudio_mad_cow: "https://www.moskyaudio.com/Uploads/65f402af36bdd.jpg",
+  moskyAudio_effect_pedal_cable: "https://www.moskyaudio.com/Uploads/581c4ce5297da.png",
+  
+  // M-VAVE Products
+  mvave_mini_universe: "https://img.website.xin/contents/sitefiles3604/18022920/images/10339783.jpg",
+  mvave_elemental: "https://img.website.xin/contents/sitefiles3604/18022920/images/9719731.jpg",
+  mvave_annblackbox: "https://img.website.xin/contents/sitefiles3604/18022920/images/10219104.jpg",
+  mvave_ir_box: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720172.jpg",
+  mvave_baby: "https://img.website.xin/contents/sitefiles3604/18022920/images/8570933.png",
+  mvave_tank_g: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376698.png",
+  mvave_tank_b: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376701.png",
+  mvave_chocolate: "https://img.website.xin/contents/sitefiles3604/18022920/images/11350155.jpg",
+  mvave_pedal_power: "https://img.website.xin/contents/sitefiles3604/18022920/images/8596626.png",
+  mvave_wp_9: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720023.jpg",
+  mvave_wireless_in_ear_monitor_system: "https://img.website.xin/contents/sitefiles3604/18022920/images/10710519.jpg",
+  mvave_wp_8_wireless_system: "https://img.website.xin/contents/sitefiles3604/18022920/images/8595897.jpg",
 };
 
+// Helper function to create products
+async function createProduct(
+    id: string,
+    name: string,
+    description: string,
+    price: number,
+    stock: number,
+    categoryId: string,
+    images: string[]
+  ) {
+  return await prisma.product.upsert({
+    where: { id },
+    update: {},
+    create: {
+      id,
+      name,
+      description,
+      price,
+      stock,
+      categoryId,
+      images,
+    },
+  });
+}
+
 async function main() {
-  console.log('🌱 Starting seed...');
+  try {
+    console.log('🌱 Starting seed...');
 
-  // Create admin user
-  console.log('Creating admin user...');
-  const hashedPassword = await bcrypt.hash('johndoe123', 10);
-  
-  const adminUser = await prisma.user.upsert({
-    where: { email: 'john@doe.com' },
-    update: {},
-    create: {
-      email: 'john@doe.com',
-      password: hashedPassword,
-      name: 'John Doe',
-      role: 'ADMIN',
-    },
-  });
-  console.log('✅ Admin user created:', adminUser.email);
+    // Create admin user
+    console.log('Creating admin user...');
+    const hashedPassword = await bcrypt.hash('johndoe123', 10);
+    
+    const adminUser = await prisma.user.upsert({
+      where: { email: 'john@doe.com' },
+      update: {},
+      create: {
+        email: 'john@doe.com',
+        password: hashedPassword,
+        name: 'John Doe',
+        role: 'ADMIN',
+      },
+    });
+    console.log('✅ Admin user created:', adminUser.email);
 
-  // Create categories
-  console.log('Creating categories...');
-  const electronica = await prisma.category.upsert({
-    where: { slug: 'electronica' },
-    update: {},
-    create: {
-      name: 'Electrónica',
-      slug: 'electronica',
-      description: 'Dispositivos electrónicos y tecnología de última generación',
-    },
-  });
+    // Create categories
+    console.log('Creating categories...');
+    const electronica = await prisma.category.upsert({
+      where: { slug: 'electronica' },
+      update: {},
+      create: {
+        name: 'Electrónica',
+        slug: 'electronica',
+        description: 'Dispositivos electrónicos y tecnología de última generación',
+      },
+    });
+    const accessory = await prisma.category.upsert({
+      where: { slug: 'accesorios' },
+      update: {},
+      create: {
+        name: 'Accesorios',
+        slug: 'accesorios',
+        description: 'Herramientas y complementos más avanzados que tenemos',
+      },
+    });
+    
+    const pedal_effect = await prisma.category.upsert({
+      where: { slug: 'pedal_effect' },
+      update: {},
+      create: {
+        name: 'Pedales de Efectos',
+        slug: 'pedal_effect',
+        description: 'Los mejores pedales de efectos que tenemos',
+      },
+    });
 
-  const ropa = await prisma.category.upsert({
-    where: { slug: 'ropa' },
-    update: {},
-    create: {
-      name: 'Ropa',
-      slug: 'ropa',
-      description: 'Moda y vestimenta para todas las ocasiones',
-    },
-  });
+    console.log('✅ Categories created');
+    // Create products
+    console.log('Creating products...');
 
-  const hogar = await prisma.category.upsert({
-    where: { slug: 'hogar' },
-    update: {},
-    create: {
-      name: 'Hogar',
-      slug: 'hogar',
-      description: 'Muebles y artículos para el hogar',
-    },
-  });
+    // MoskyAudio Products - Pedal Effects
+    await createProduct(
+      'bright-flame-amp-001',
+      'Bright Flame Amp - MoskyAudio',
+      'MULTI GUITAR AMPLIFIER. You have now in your hands the most versatile, useful and amazing sounding piece of gear. The first Zero watt stereo amplifier that will fit in your pedalboard and replace a full amplifier signal chain, achieving unprecedented analog realism thanks to its stereo mic\'d cabinet simulation, stereo FX loop, tube-like power amp stage, and a full featured clean preamp based on 3 classic amps.',
+      90.00,
+      3,
+      pedal_effect.id,
+      [productImages.moskyAudio_bright_flame_amp]
+    );
 
-  const deportes = await prisma.category.upsert({
-    where: { slug: 'deportes' },
-    update: {},
-    create: {
-      name: 'Deportes',
-      slug: 'deportes',
-      description: 'Equipamiento deportivo y fitness',
-    },
-  });
-  console.log('✅ Categories created');
+    await createProduct(
+      'g-iii-blue-purple-001',
+      'G III BLUE Purple Channel Preamp/Overdrive/Distortion',
+      'MOSKYaudio G III BLUE Purple Channel Preamp/Overdrive/Distortion pedal. A versatile multi-stage effects pedal perfect for guitarists looking for classic tube amp tones.',
+      45.00,
+      10,
+      pedal_effect.id,
+      [productImages.moskyAudio_g_iii_blue_purple]
+    );
 
-  // Create products
-  console.log('Creating products...');
+    await createProduct(
+      'overdrive-dolphin-001',
+      'DOLPHIN OverDrive',
+      'The DOLPHIN OverDrive pedal delivers smooth, creamy overdrive tones with excellent touch sensitivity. Perfect for blues, rock, and everything in between.',
+      35.00,
+      15,
+      pedal_effect.id,
+      [productImages.moskyAudio_overdrive_dolphin]
+    );
 
-  // Electrónica
-  await prisma.product.upsert({
-    where: { id: 'laptop-001' },
-    update: {},
-    create: {
-      id: 'laptop-001',
-      name: 'Laptop Profesional Ultra',
-      description: 'Laptop de última generación con procesador de alta velocidad, 16GB RAM y pantalla Full HD de 15.6 pulgadas. Ideal para profesionales y diseñadores.',
-      price: 899.99,
-      stock: 15,
-      categoryId: electronica.id,
-      images: [productImages.laptop_moderna],
-    },
-  });
+    await createProduct(
+      'lm741-preamp-001',
+      'LM741 PREAMP',
+      'High-quality preamp pedal based on the classic LM741 op-amp. Provides clean, transparent amplification with excellent headroom and low noise.',
+      30.00,
+      20,
+      pedal_effect.id,
+      [productImages.moskyAudio_lm741_preamp]
+    );
 
-  await prisma.product.upsert({
-    where: { id: 'smartphone-001' },
-    update: {},
-    create: {
-      id: 'smartphone-001',
-      name: 'Smartphone Premium X',
-      description: 'Smartphone de última generación con cámara de 48MP, pantalla AMOLED de 6.5 pulgadas y batería de larga duración. 5G habilitado.',
-      price: 699.99,
-      stock: 25,
-      categoryId: electronica.id,
-      images: [productImages.smartphone_premium],
-    },
-  });
+    await createProduct(
+      'cosmic-blue-001',
+      'COSMIC BLUE',
+      'The COSMIC BLUE pedal offers a wide range of modulation effects. From subtle chorus to deep vibrato, this pedal is a must-have for any guitarist.',
+      40.00,
+      12,
+      pedal_effect.id,
+      [productImages.moskyAudio_cosmic_blue]
+    );
 
-  await prisma.product.upsert({
-    where: { id: 'auriculares-001' },
-    update: {},
-    create: {
-      id: 'auriculares-001',
-      name: 'Auriculares Bluetooth Pro',
-      description: 'Auriculares inalámbricos con cancelación de ruido activa, sonido Hi-Fi y hasta 30 horas de batería. Perfectos para música y trabajo.',
-      price: 149.99,
-      stock: 40,
-      categoryId: electronica.id,
-      images: [productImages.auriculares_bluetooth],
-    },
-  });
+    await createProduct(
+      'sky-reverb-delay-001',
+      'SKY REVERB & DELAY',
+      'Combined reverb and delay effects pedal. Create lush ambient soundscapes with the reverb section and add depth with the delay. Perfect for atmospheric playing.',
+      50.00,
+      10,
+      pedal_effect.id,
+      [productImages.moskyAudio_sky_reverb_delay]
+    );
 
-  // Ropa
-  await prisma.product.upsert({
-    where: { id: 'camiseta-001' },
-    update: {},
-    create: {
-      id: 'camiseta-001',
-      name: 'Camiseta Básica Premium',
-      description: 'Camiseta de algodón 100% premium, suave al tacto y de corte moderno. Disponible en azul. Perfecta para uso diario.',
-      price: 24.99,
-      stock: 100,
-      categoryId: ropa.id,
-      images: [productImages.camiseta_basica],
-    },
-  });
+    await createProduct(
+      'sol918-multi-effects-001',
+      'SOL918 Multi-Effects Pedal',
+      'Comprehensive multi-effects pedal featuring a wide range of effects including distortion, delay, reverb, and modulation. All-in-one solution for versatile tone shaping.',
+      85.00,
+      5,
+      pedal_effect.id,
+      [productImages.moskyAudio_sol918_multi_effects]
+    );
 
-  await prisma.product.upsert({
-    where: { id: 'jeans-001' },
-    update: {},
-    create: {
-      id: 'jeans-001',
-      name: 'Jeans Clásicos Comfort',
-      description: 'Jeans de corte clásico con tela elastizada para máxima comodidad. Diseño atemporal que combina con todo.',
-      price: 49.99,
-      stock: 60,
-      categoryId: ropa.id,
-      images: [productImages.jeans_clasicos],
-    },
-  });
+    await createProduct(
+      'blue-ocean-chorus-001',
+      'Blue Ocean Chorus',
+      'Classic analog chorus effect with rich, warm modulation. The Blue Ocean Chorus adds depth and movement to your tone, perfect for clean passages and rhythm work.',
+      38.00,
+      15,
+      pedal_effect.id,
+      [productImages.moskyAudio_blue_ocean_chorus]
+    );
 
-  await prisma.product.upsert({
-    where: { id: 'zapatillas-001' },
-    update: {},
-    create: {
-      id: 'zapatillas-001',
-      name: 'Zapatillas Deportivas Air',
-      description: 'Zapatillas deportivas con suela de amortiguación avanzada y diseño ligero. Ideales para correr y entrenar.',
-      price: 79.99,
-      stock: 50,
-      categoryId: ropa.id,
-      images: [productImages.zapatillas_deportivas],
-    },
-  });
+    await createProduct(
+      'mad-cow-001',
+      'MAD COW',
+      'Aggressive distortion pedal with massive gain and sustain. The MAD COW delivers crushing high-gain tones perfect for metal and hard rock.',
+      42.00,
+      12,
+      pedal_effect.id,
+      [productImages.moskyAudio_mad_cow]
+    );
 
-  // Hogar
-  await prisma.product.upsert({
-    where: { id: 'lampara-001' },
-    update: {},
-    create: {
-      id: 'lampara-001',
-      name: 'Lámpara de Mesa Moderna',
-      description: 'Lámpara LED recargable con diseño minimalista. Tres niveles de brillo ajustables. Perfecta para escritorio o mesita de noche.',
-      price: 39.99,
-      stock: 35,
-      categoryId: hogar.id,
-      images: [productImages.lampara_moderna],
-    },
-  });
+    // MoskyAudio Products - Accessories
+    await createProduct(
+      'iso10-power-supply-001',
+      'ISO-10 POWER SUPPLY',
+      'Isolated power supply with 10 outputs. Provides clean, isolated power for your entire pedalboard, eliminating noise and hum from daisy-chained power supplies.',
+      55.00,
+      8,
+      electronica.id,
+      [productImages.moskyAudio_iso10_power_supply]
+    );
 
-  await prisma.product.upsert({
-    where: { id: 'silla-001' },
-    update: {},
-    create: {
-      id: 'silla-001',
-      name: 'Silla de Oficina Ergonómica',
-      description: 'Silla ergonómica con respaldo ajustable, reposabrazos y soporte lumbar. Diseñada para largas jornadas de trabajo.',
-      price: 199.99,
-      stock: 20,
-      categoryId: hogar.id,
-      images: [productImages.silla_oficina],
-    },
-  });
+    await createProduct(
+      'moskyaudio-effect-pedal-cable-001',
+      'MoskyAudio Effect Pedal Cable',
+      'High-quality patch cable for connecting effects pedals. Durable construction with gold-plated connectors for optimal signal transfer and minimal noise.',
+      12.00,
+      50,
+      accessory.id,
+      [productImages.moskyAudio_effect_pedal_cable]
+    );
 
-  await prisma.product.upsert({
-    where: { id: 'mesa-001' },
-    update: {},
-    create: {
-      id: 'mesa-001',
-      name: 'Mesa de Madera Natural',
-      description: 'Mesa de madera maciza con acabado natural. Diseño moderno y minimalista. Ideal para comedor o escritorio.',
-      price: 299.99,
-      stock: 12,
-      categoryId: hogar.id,
-      images: [productImages.mesa_madera],
-    },
-  });
+    // M-VAVE Products - Pedal Effects
+    await createProduct(
+      'mvave-mini-universe-001',
+      'M-VAVE Mini Universe',
+      'Compact multi-effects pedal with a universe of tones. The Mini Universe packs powerful effects into a small footprint, perfect for any pedalboard.',
+      65.00,
+      8,
+      pedal_effect.id,
+      [productImages.mvave_mini_universe]
+    );
 
-  // Deportes
-  await prisma.product.upsert({
-    where: { id: 'balon-001' },
-    update: {},
-    create: {
-      id: 'balon-001',
-      name: 'Balón de Fútbol Profesional',
-      description: 'Balón oficial de fútbol con diseño clásico. Construcción de alta calidad para un juego óptimo.',
-      price: 29.99,
-      stock: 45,
-      categoryId: deportes.id,
-      images: [productImages.balon_futbol],
-    },
-  });
+    await createProduct(
+      'mvave-elemental-001',
+      'M-VAVE Elemental',
+      'The Elemental pedal offers essential effects in a compact design. Perfect for guitarists who want quality effects without the complexity.',
+      55.00,
+      10,
+      pedal_effect.id,
+      [productImages.mvave_elemental]
+    );
 
-  await prisma.product.upsert({
-    where: { id: 'raqueta-001' },
-    update: {},
-    create: {
-      id: 'raqueta-001',
-      name: 'Raqueta de Tenis Pro',
-      description: 'Raqueta profesional de tenis con marco de grafito. Balance perfecto entre potencia y control.',
-      price: 89.99,
-      stock: 18,
-      categoryId: deportes.id,
-      images: [productImages.raqueta_tenis],
-    },
-  });
+    await createProduct(
+      'mvave-annblackbox-001',
+      'M-VAVE Ann Black Box',
+      'Professional effects processor with advanced algorithms. The Ann Black Box delivers studio-quality effects in a pedal format.',
+      75.00,
+      6,
+      pedal_effect.id,
+      [productImages.mvave_annblackbox]
+    );
 
-  await prisma.product.upsert({
-    where: { id: 'bicicleta-001' },
-    update: {},
-    create: {
-      id: 'bicicleta-001',
-      name: 'Bicicleta de Montaña X-Trail',
-      description: 'Bicicleta de montaña con suspensión completa, 21 velocidades y cuadro de aluminio ligero. Lista para cualquier terreno.',
-      price: 499.99,
-      stock: 8,
-      categoryId: deportes.id,
-      images: [productImages.bicicleta_montana],
-    },
-  });
+    await createProduct(
+      'mvave-baby-001',
+      'M-VAVE Baby',
+      'Compact and versatile effects pedal perfect for beginners and professionals alike. The Baby delivers big tone in a small package.',
+      45.00,
+      15,
+      pedal_effect.id,
+      [productImages.mvave_baby]
+    );
 
-  console.log('✅ Products created');
-  console.log('🎉 Seed completed successfully!');
+    await createProduct(
+      'mvave-chocolate-001',
+      'M-VAVE Chocolate',
+      'Warm and smooth effects pedal with rich, creamy tones. The Chocolate adds sweetness to your signal with its unique character.',
+      50.00,
+      12,
+      pedal_effect.id,
+      [productImages.mvave_chocolate]
+    );
+
+    // M-VAVE Products - Accessories
+    await createProduct(
+      'mvave-ir-box-001',
+      'M-VAVE IR Box',
+      'Impulse Response loader for authentic amp cabinet simulation. Load your favorite IRs and get studio-quality tones on stage.',
+      80.00,
+      5,
+      pedal_effect.id,
+      [productImages.mvave_ir_box]
+    );
+
+    await createProduct(
+      'mvave-tank-g-001',
+      'M-VAVE Tank G',
+      'High-quality effects tank with green finish. Durable construction and professional-grade components for reliable performance.',
+      60.00,
+      8,
+      pedal_effect.id,
+      [productImages.mvave_tank_g]
+    );
+
+    await createProduct(
+      'mvave-tank-b-001',
+      'M-VAVE Tank B',
+      'High-quality effects tank with blue finish. Durable construction and professional-grade components for reliable performance.',
+      60.00,
+      8,
+      pedal_effect.id,
+      [productImages.mvave_tank_b]
+    );
+
+    await createProduct(
+      'mvave-pedal-power-001',
+      'M-VAVE Pedal Power',
+      'Isolated power supply for your pedalboard. Provides clean, noise-free power to all your effects pedals with multiple voltage options.',
+      70.00,
+      7,
+      electronica.id,
+      [productImages.mvave_pedal_power]
+    );
+
+    await createProduct(
+      'mvave-wp-9-001',
+      'M-VAVE WP-9',
+      'Professional wireless system for instruments. Reliable transmission with low latency, perfect for live performances and studio use.',
+      120.00,
+      6,
+      electronica.id,
+      [productImages.mvave_wp_9]
+    );
+
+    await createProduct(
+      'mvave-wireless-in-ear-monitor-001',
+      'M-VAVE Wireless In-Ear Monitor System',
+      'Professional wireless in-ear monitoring system. Crystal clear audio transmission with multiple channels for band members and performers.',
+      200.00,
+      4,
+      electronica.id,
+      [productImages.mvave_wireless_in_ear_monitor_system]
+    );
+
+    await createProduct(
+      'mvave-wp-8-wireless-001',
+      'M-VAVE WP-8 Wireless System',
+      'Compact wireless system for guitar and bass. Easy to use with excellent range and sound quality. Perfect for stage and studio.',
+      110.00,
+      7,
+      electronica.id,
+      [productImages.mvave_wp_8_wireless_system]
+    );
+
+    console.log('✅ Products created');
+    console.log('🎉 Seed completed successfully!');
+  } catch (error) {
+    console.error('❌ Error during seeding:', error);
+    throw error;
+  }
 }
 
 main()
@@ -266,4 +362,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-  });
+});

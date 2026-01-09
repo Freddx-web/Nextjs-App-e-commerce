@@ -15,7 +15,7 @@
       "db:seed": "tsx --require dotenv/config scripts/seed.ts",
       "prisma-push": "npx prisma db push",
       "prisma-seed": "db:seed",
-      "prisma-dev": "prisma generate && prisma migrate reset && prisma migrate dev --name init"
+      "prisma-dev": "npx prisma generate && prisma migrate reset && prisma migrate dev --name init"
   },
   "devDependencies": {
     "@next/swc-wasm-nodejs": "13.5.1",

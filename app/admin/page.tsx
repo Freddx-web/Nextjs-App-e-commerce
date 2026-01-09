@@ -18,7 +18,7 @@ interface Stats {
     totalSold: number;
   }[];
   ordersByStatus: {
-    status: string;w
+    status: string;
     _count: { id: number };
   }[];
 }
