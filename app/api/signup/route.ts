@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, name } = body;
+    const { email, password, name, phone } = body;
 
     if (!email || !password) {
       return NextResponse.json(
