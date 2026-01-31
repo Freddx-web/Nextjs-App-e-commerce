@@ -5,31 +5,80 @@ const prisma = new PrismaClient();
 
 // Product images organized by category
 const productImages = {
-  // MoskyAudio Products
-  moskyAudio_bright_flame_amp: "https://www.moskyaudio.com/Uploads/674fb86d9ce33.jpg",
-  moskyAudio_g_iii_blue_purple: "https://www.moskyaudio.com/Uploads/667d0e69a626e.jpg",
-  moskyAudio_overdrive_dolphin: "https://www.moskyaudio.com/Uploads/64632ad9ead27.jpg",
+  /**
+   * MoskyAudio Products
+   */
+  // Imagenes del Bright Flame Amp
+  moskyAudio_bright_flame_amp_photo_0: "https://www.moskyaudio.com/Uploads/674fb86d9ce33.jpg",
+  moskyAudio_bright_flame_amp_photo_1: "https://www.moskyaudio.com/Uploads/674fb86d9aa93.jpg",
+  moskyAudio_bright_flame_amp_photo_2: "https://www.moskyaudio.com/Uploads/674fb86d9b28a.jpg",
+  // Imagenes del G III blue purple
+  moskyAudio_g_iii_blue_purple_photo_0: "https://www.moskyaudio.com/Uploads/667d0e69a626e.jpg",
+  // Imagenes del overdrive dolphin
+  moskyAudio_overdrive_dolphin_photo_0: "https://www.moskyaudio.com/Uploads/64632ad9ead27.jpg",
+  moskyAudio_overdrive_dolphin_photo_1: "https://www.moskyaudio.com/Uploads/64632ad9eb964.jpg",
+  moskyAudio_overdrive_dolphin_photo_2: "https://www.moskyaudio.com/Uploads/64632ad9ec137.jpg",
+  /// Imagenes del lm741 preamp
   moskyAudio_lm741_preamp: "https://www.moskyaudio.com/Uploads/64632fa74e960.jpg",
+  // Imagenes del cosmic blue
   moskyAudio_cosmic_blue: "https://www.moskyaudio.com/Uploads/64632f712b227.jpg",
+  // Imagenes del iso10 power supply
   moskyAudio_iso10_power_supply: "https://www.moskyaudio.com/Uploads/60da957db5fd0.jpg",
+  // Imagenes del sky reverb delay
   moskyAudio_sky_reverb_delay: "https://www.moskyaudio.com/Uploads/5fe45bc5363dd.jpg",
-  moskyAudio_sol918_multi_effects: "https://www.moskyaudio.com/Uploads/60da9377a8597.jpg",
+  // Imagenes del sol918 multi effects
+  moskyAudio_sol918_multi_effects_photo_0: "https://www.moskyaudio.com/Uploads/60da9377a8597.jpg",
+  moskyAudio_sol918_multi_effects_photo_1: "https://www.moskyaudio.com/Uploads/60da9377a7d6c.jpg",
+  // Imagenes del blue ocean chorus
   moskyAudio_blue_ocean_chorus: "https://www.moskyaudio.com/Uploads/60da8feaaaca0.jpg",
+  // Imagenes del mad cow
   moskyAudio_mad_cow: "https://www.moskyaudio.com/Uploads/65f402af36bdd.jpg",
+  // Imagenes del effect pedal cable
   moskyAudio_effect_pedal_cable: "https://www.moskyaudio.com/Uploads/581c4ce5297da.png",
   
-  // M-VAVE Products
-  mvave_mini_universe: "https://img.website.xin/contents/sitefiles3604/18022920/images/10339783.jpg",
-  mvave_elemental: "https://img.website.xin/contents/sitefiles3604/18022920/images/9719731.jpg",
-  mvave_annblackbox: "https://img.website.xin/contents/sitefiles3604/18022920/images/10219104.jpg",
-  mvave_ir_box: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720172.jpg",
-  mvave_baby: "https://img.website.xin/contents/sitefiles3604/18022920/images/8570933.png",
-  mvave_tank_g: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376698.png",
-  mvave_tank_b: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376701.png",
-  mvave_chocolate: "https://img.website.xin/contents/sitefiles3604/18022920/images/11350155.jpg",
-  mvave_pedal_power: "https://img.website.xin/contents/sitefiles3604/18022920/images/8596626.png",
-  mvave_wp_9: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720023.jpg",
+  /**
+   * M-VAVE Products
+   */
+  // Imagenes del pedal mini Universe
+  mvave_mini_universe_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/10339783.jpg",
+  mvave_mini_universe_photo_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/10339785.jpg",
+  mvave_mini_universe_photo_2: "https://img.website.xin/contents/sitefiles3604/18022920/images/11019448.jpg",
+  // Imagenes del pedal Elemental
+  mvave_elemental_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/9719731.jpg",
+  mvave_elemental_photo_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/9719728.jpg",
+  mvave_elemental_photo_2: "https://img.website.xin/contents/sitefiles3604/18022920/images/9719730.jpg",
+  // Imagenes del Annblackbox
+  mvave_annblackbox_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/10219104.jpg",
+  mvave_annblackbox_photo_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/10219108.jpg",
+  mvave_annblackbox_photo_2:  "https://img.website.xin/contents/sitefiles3604/18022920/images/10219107.jpg",
+  // Imagenes del IR BOX
+  mvave_ir_box_phot_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720172.jpg",
+  mvave_ir_box_phot_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720176.jpg",
+  mvave_ir_box_phot_2: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720173.jpg",
+  // Imagenes del M VAVE CUBE BABY
+  mvave_baby_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/8570933.png",
+  mvave_baby_photo_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/8570936.jpg",
+  mvave_baby_photo_2: "https://img.website.xin/contents/sitefiles3604/18022920/images/8570935.jpg",
+  // Imagenes de M VAVE TANK G
+  mvave_tank_g_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376698.png",
+  mvave_tank_g_photo_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376699.png",
+  mvave_tank_g_photo_2: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376700.png",
+  // Imagenes de M VAVE TANK B 
+  mvave_tank_b_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376701.png",
+  mvave_tank_b_photo_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376702.png",
+  mvave_tank_b_photo_2: "https://img.website.xin/contents/sitefiles3604/18022920/images/8376700.png",
+  // Imagenes de M VAVE CHOCOLATE 
+  mvave_chocolate_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/11350155.jpg",
+  mvave_chocolate_photo_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/11350157.jpg",
+  mvave_chocolate_photo_2: "https://img.website.xin/contents/sitefiles3604/18022920/images/11350158.jpg",
+  // Imagenes de M VAVE PEDAL POWER
+  mvave_pedal_power_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/8596626.png",
+  // Imagenes de M VAVE WP 9
+  mvave_wp_9_photo_0: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720023.jpg",
+  mvave_wp_9_photo_1: "https://img.website.xin/contents/sitefiles3604/18022920/images/9720024.jpg",
+  // Imagenes de wireless in ear monitor_system
   mvave_wireless_in_ear_monitor_system: "https://img.website.xin/contents/sitefiles3604/18022920/images/10710519.jpg",
+  // Imagenes de wp 8 wireless system
   mvave_wp_8_wireless_system: "https://img.website.xin/contents/sitefiles3604/18022920/images/8595897.jpg",
 };
 
@@ -116,37 +165,45 @@ async function main() {
     // MoskyAudio Products - Pedal Effects
     await createProduct(
       'bright-flame-amp-001',
-      'Bright Flame Amp - MoskyAudio',
+      'MoskyAudio Bright Flame Amp - MoskyAudio',
       'MULTI GUITAR AMPLIFIER. You have now in your hands the most versatile, useful and amazing sounding piece of gear. The first Zero watt stereo amplifier that will fit in your pedalboard and replace a full amplifier signal chain, achieving unprecedented analog realism thanks to its stereo mic\'d cabinet simulation, stereo FX loop, tube-like power amp stage, and a full featured clean preamp based on 3 classic amps.',
       90.00,
       3,
       pedal_effect.id,
-      [productImages.moskyAudio_bright_flame_amp]
+      [
+        productImages.moskyAudio_bright_flame_amp_photo_0,
+        productImages.moskyAudio_bright_flame_amp_photo_1,
+        productImages.moskyAudio_bright_flame_amp_photo_2,
+      ]
     );
 
     await createProduct(
       'g-iii-blue-purple-001',
-      'G III BLUE Purple Channel Preamp/Overdrive/Distortion',
-      'MOSKYaudio G III BLUE Purple Channel Preamp/Overdrive/Distortion pedal. A versatile multi-stage effects pedal perfect for guitarists looking for classic tube amp tones.',
+      'MoskyAudio G III BLUE Purple Channel Preamp/Overdrive/Distortion',
+      'MoskyAudio G III BLUE Purple Channel Preamp/Overdrive/Distortion pedal. A versatile multi-stage effects pedal perfect for guitarists looking for classic tube amp tones.',
       45.00,
       10,
       pedal_effect.id,
-      [productImages.moskyAudio_g_iii_blue_purple]
+      [productImages.moskyAudio_g_iii_blue_purple_photo_0]
     );
 
     await createProduct(
       'overdrive-dolphin-001',
-      'DOLPHIN OverDrive',
+      'MoskyAudio DOLPHIN OverDrive',
       'The DOLPHIN OverDrive pedal delivers smooth, creamy overdrive tones with excellent touch sensitivity. Perfect for blues, rock, and everything in between.',
       35.00,
       15,
       pedal_effect.id,
-      [productImages.moskyAudio_overdrive_dolphin]
+      [
+        productImages.moskyAudio_overdrive_dolphin_photo_0,
+        productImages.moskyAudio_overdrive_dolphin_photo_1,
+        productImages.moskyAudio_overdrive_dolphin_photo_2,
+      ]
     );
 
     await createProduct(
       'lm741-preamp-001',
-      'LM741 PREAMP',
+      'MoskyAudio LM741 PREAMP',
       'High-quality preamp pedal based on the classic LM741 op-amp. Provides clean, transparent amplification with excellent headroom and low noise.',
       30.00,
       20,
@@ -156,7 +213,7 @@ async function main() {
 
     await createProduct(
       'cosmic-blue-001',
-      'COSMIC BLUE',
+      'MoskyAudio COSMIC BLUE',
       'The COSMIC BLUE pedal offers a wide range of modulation effects. From subtle chorus to deep vibrato, this pedal is a must-have for any guitarist.',
       40.00,
       12,
@@ -166,7 +223,7 @@ async function main() {
 
     await createProduct(
       'sky-reverb-delay-001',
-      'SKY REVERB & DELAY',
+      'MoskyAudio KY REVERB & DELAY',
       'Combined reverb and delay effects pedal. Create lush ambient soundscapes with the reverb section and add depth with the delay. Perfect for atmospheric playing.',
       50.00,
       10,
@@ -176,17 +233,20 @@ async function main() {
 
     await createProduct(
       'sol918-multi-effects-001',
-      'SOL918 Multi-Effects Pedal',
+      'MoskyAudio SOL918 Multi-Effects Pedal',
       'Comprehensive multi-effects pedal featuring a wide range of effects including distortion, delay, reverb, and modulation. All-in-one solution for versatile tone shaping.',
       85.00,
       5,
       pedal_effect.id,
-      [productImages.moskyAudio_sol918_multi_effects]
+      [
+        productImages.moskyAudio_sol918_multi_effects_photo_0,
+        productImages.moskyAudio_sol918_multi_effects_photo_1,
+      ]
     );
 
     await createProduct(
       'blue-ocean-chorus-001',
-      'Blue Ocean Chorus',
+      'MoskyAudio Blue Ocean Chorus',
       'Classic analog chorus effect with rich, warm modulation. The Blue Ocean Chorus adds depth and movement to your tone, perfect for clean passages and rhythm work.',
       38.00,
       15,
@@ -196,7 +256,7 @@ async function main() {
 
     await createProduct(
       'mad-cow-001',
-      'MAD COW',
+      'MoskyAudio MAD COW',
       'Aggressive distortion pedal with massive gain and sustain. The MAD COW delivers crushing high-gain tones perfect for metal and hard rock.',
       42.00,
       12,
@@ -207,7 +267,7 @@ async function main() {
     // MoskyAudio Products - Accessories
     await createProduct(
       'iso10-power-supply-001',
-      'ISO-10 POWER SUPPLY',
+      'MoskyAudio ISO-10 POWER SUPPLY',
       'Isolated power supply with 10 outputs. Provides clean, isolated power for your entire pedalboard, eliminating noise and hum from daisy-chained power supplies.',
       55.00,
       8,
@@ -229,11 +289,15 @@ async function main() {
     await createProduct(
       'mvave-mini-universe-001',
       'M-VAVE Mini Universe',
-      'Compact multi-effects pedal with a universe of tones. The Mini Universe packs powerful effects into a small footprint, perfect for any pedalboard.',
+      'This product is a compact metal appearance design.There are 9 reverbs in total, it can be adapted to a variety of music.MINI-UNIVERSE will let you get warm and natural timbre, also it has dynamic response. High performance digital signal processor, to provide you with a nuanced sound. True bypass.',
       65.00,
       8,
       pedal_effect.id,
-      [productImages.mvave_mini_universe]
+      [
+        productImages.mvave_mini_universe_photo_0,
+        productImages.mvave_mini_universe_photo_1,
+        productImages.mvave_mini_universe_photo_2,
+      ]
     );
 
     await createProduct(
@@ -243,7 +307,11 @@ async function main() {
       55.00,
       10,
       pedal_effect.id,
-      [productImages.mvave_elemental]
+      [
+        productImages.mvave_elemental_photo_0,
+        productImages.mvave_elemental_photo_1,
+        productImages.mvave_elemental_photo_2,
+      ]
     );
 
     await createProduct(
@@ -253,7 +321,11 @@ async function main() {
       75.00,
       6,
       pedal_effect.id,
-      [productImages.mvave_annblackbox]
+      [
+        productImages.mvave_annblackbox_photo_0,
+        productImages.mvave_annblackbox_photo_1,
+        productImages.mvave_annblackbox_photo_2,
+      ]
     );
 
     await createProduct(
@@ -263,7 +335,11 @@ async function main() {
       45.00,
       15,
       pedal_effect.id,
-      [productImages.mvave_baby]
+      [
+        productImages.mvave_baby_photo_0,
+        productImages.mvave_baby_photo_1,
+        productImages.mvave_baby_photo_2,
+      ]
     );
 
     await createProduct(
@@ -273,7 +349,11 @@ async function main() {
       50.00,
       12,
       pedal_effect.id,
-      [productImages.mvave_chocolate]
+      [
+        productImages.mvave_chocolate_photo_0,
+        productImages.mvave_chocolate_photo_1,
+        productImages.mvave_chocolate_photo_2,
+      ]
     );
 
     // M-VAVE Products - Accessories
@@ -284,7 +364,11 @@ async function main() {
       80.00,
       5,
       pedal_effect.id,
-      [productImages.mvave_ir_box]
+      [
+        productImages.mvave_ir_box_phot_0,
+        productImages.mvave_ir_box_phot_1,
+        productImages.mvave_ir_box_phot_2,
+      ]
     );
 
     await createProduct(
@@ -294,17 +378,25 @@ async function main() {
       60.00,
       8,
       pedal_effect.id,
-      [productImages.mvave_tank_g]
+      [
+        productImages.mvave_tank_g_photo_0,
+        productImages.mvave_tank_g_photo_1,
+        productImages.mvave_tank_g_photo_2,
+      ]
     );
 
     await createProduct(
       'mvave-tank-b-001',
       'M-VAVE Tank B',
-      'High-quality effects tank with blue finish. Durable construction and professional-grade components for reliable performance.',
+      'TANK-B is a portable and multifunctional bass effector.Built in rechargeable battery. 36 editable Presets inside, user can customize effectors chain then save it.Equipped with Noise Gate,Compressor,9 Preamp selection slots,3-band EQ,3 Modulations,1 Delay,1 Reverb, 8 IR CAB slots and a Tuner.User can download the computer software or APP from our official website, then use them to edit presets, exchange presets, share presets, import/export presets,import IR file, restore the factory Settings and customize the color that each preset footswitch-light displays.Support mobile phone recording, wireless connection, earphone monitoring, XLR balanced output, and can be used as computer sound card.',
       60.00,
       8,
       pedal_effect.id,
-      [productImages.mvave_tank_b]
+      [
+        productImages.mvave_tank_b_photo_0,
+        productImages.mvave_tank_b_photo_1,
+        productImages.mvave_tank_b_photo_2,
+      ]
     );
 
     await createProduct(
@@ -314,7 +406,7 @@ async function main() {
       70.00,
       7,
       electronica.id,
-      [productImages.mvave_pedal_power]
+      [productImages.mvave_pedal_power_photo_0]
     );
 
     await createProduct(
@@ -324,7 +416,10 @@ async function main() {
       120.00,
       6,
       electronica.id,
-      [productImages.mvave_wp_9]
+      [
+        productImages.mvave_wp_9_photo_0,
+        productImages.mvave_wp_9_photo_1,
+      ]
     );
 
     await createProduct(

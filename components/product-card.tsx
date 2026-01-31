@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Images } from 'lucide-react';
 import { Button } from './ui/button';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -69,12 +69,20 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         <div className="group cursor-pointer rounded-lg bg-white p-4 shadow-md hover:shadow-xl transition-all duration-300">
           <div className="relative aspect-square w-full overflow-hidden rounded-md bg-gray-100 mb-4">
             {product?.images?.[0] ? (
-              <Image
-                src={product.images[0]}
-                alt={product.name}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
+              <>
+                <Image
+                  src={product.images[0]}
+                  alt={product.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                {product.images.length > 1 && (
+                  <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                    <Images className="h-3 w-3" />
+                    {product.images.length}
+                  </div>
+                )}
+              </>
             ) : (
               <div className="flex h-full items-center justify-center text-gray-400">
                 Sin imagen

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
+import { ProductPhotoAlbum } from '@/components/product-photo-album';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -28,7 +28,6 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     if (params?.id) {
@@ -112,42 +111,13 @@ export default function ProductDetailPage() {
           transition={{ duration: 0.5 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-2xl shadow-lg p-8"
         >
-          {/* Image Gallery */}
-          <div className="space-y-4">
-            <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-gray-100">
-              {product?.images?.[selectedImage] ? (
-                <Image
-                  src={product.images[selectedImage]}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center text-gray-400">
-                  Sin imagen
-                </div>
-              )}
-            </div>
-            {product?.images && product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
-                {product.images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setSelectedImage(idx)}
-                    className={`relative aspect-square rounded-md overflow-hidden ${
-                      selectedImage === idx ? 'ring-2 ring-[#60B5FF]' : ''
-                    }`}
-                  >
-                    <Image
-                      src={img}
-                      alt={`${product.name} ${idx + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+          {/* Photo Album Gallery */}
+          <div>
+            <ProductPhotoAlbum
+              images={product.images || []}
+              productName={product.name}
+              initialIndex={0}
+            />
           </div>
 
           {/* Product Info */}
