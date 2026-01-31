@@ -1,5 +1,11 @@
 # 🛒 Ecommerce Next DeepAgent
 
+
+npx prisma db push o npx prisma migrate dev
+
+
+
+
 Una aplicación completa de comercio electrónico construida con Next.js 14, TypeScript, Prisma, y PostgreSQL.
 
 ## ✨ Características

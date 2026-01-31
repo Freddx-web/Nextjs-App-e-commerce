@@ -55,7 +55,7 @@ export function Header() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="text-2xl font-bold text-[#60B5FF] hover:text-[#4A9FE8] transition-colors">
-            ShopMusic
+            GuitarShop
           </Link>
 
           <nav className="flex items-center gap-4">
@@ -84,10 +84,12 @@ export function Header() {
                     )}
                   </Button>
                 </Link>
-                <div className="flex items-center gap-2">
-                  <User className="h-5 w-5 text-gray-600" />
-                  <span className="text-sm text-gray-700">{session.user?.name || session.user?.email}</span>
-                </div>
+                <Link href="/profile">
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <User className="h-4 w-4" />
+                    Mi Cuenta
+                  </Button>
+                </Link>
                 <Button
                   variant="ghost"
                   size="sm"
