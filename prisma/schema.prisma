@@ -31,7 +31,9 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  phone         String?
   role          Role      @default(CUSTOMER)
+  settings      String?   @db.Text
   accounts      Account[]
   sessions      Session[]
   orders        Order[]

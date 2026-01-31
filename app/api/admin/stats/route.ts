@@ -29,7 +29,7 @@ export async function GET() {
       },
     });
 
-    const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+    const totalRevenue = orders.reduce((sum: number, order: any) => sum + order.total, 0);
 
     // Total orders
     const totalOrders = await prisma.order.count();
@@ -55,7 +55,7 @@ export async function GET() {
     });
 
     const topProductsWithDetails = await Promise.all(
-      topProducts.map(async (item) => {
+      topProducts.map(async (item: any) => {
         const product = await prisma.product.findUnique({
           where: { id: item.productId },
           select: {
