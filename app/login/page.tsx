@@ -9,24 +9,25 @@ import { Input } from '@/components/ui/input';
 import { Mail, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-
+// Login Page Component
 export default function LoginPage() {
+  // State variables for email, password, and loading status
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
+    // Attempt to sign in the user
     try {
       const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
       });
-
+      // Handle sign-in result
       if (result?.error) {
         toast.error(result.error);
       } else {

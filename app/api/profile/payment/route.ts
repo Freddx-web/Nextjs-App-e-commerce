@@ -8,22 +8,24 @@ export const dynamic = "force-dynamic";
 // Mock payment methods storage since payment methods are not in the schema
 // In a real app, you would add a PaymentMethod model to the schema
 const paymentMethods: any[] = [];
-
+// Example PaymentMethod structure:
 export async function GET() {
+  // Fetch user session
   try {
+    // Fetch user session
     const session = await getServerSession(authOptions);
-    
+    // Check if user is authenticated
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
-
+    // Fetch user from database
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
       select: {
         id: true,
       },
     });
-
+    // If user not found, return error
     if (!user) {
       return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
     }
@@ -36,26 +38,28 @@ export async function GET() {
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }
-
+// Create a new payment method
 export async function POST(request: NextRequest) {
+  // Fetch user session
   try {
+    // Fetch user session
     const session = await getServerSession(authOptions);
-    
+    // Check if user is authenticated
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
-
+    // Fetch user from database
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
       select: {
         id: true,
       },
     });
-
+    // If user not found, return error
     if (!user) {
       return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
     }
-
+    // Parse request body
     const paymentData = await request.json();
     
     // Extract last 4 digits from card number
@@ -75,7 +79,8 @@ export async function POST(request: NextRequest) {
       isDefault: paymentData.isDefault || false,
       createdAt: new Date().toISOString(),
     };
-
+    // Add to mock storage
+    paymentMethods.push(newPaymentMethod);
     return NextResponse.json(newPaymentMethod);
   } catch (error) {
     console.error('Error creating payment method:', error);

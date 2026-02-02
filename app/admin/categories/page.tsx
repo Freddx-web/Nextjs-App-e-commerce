@@ -28,7 +28,7 @@ export default function AdminCategoriesPage() {
   
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-
+  // Verificar autenticación y rol de usuario
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
@@ -43,7 +43,7 @@ export default function AdminCategoriesPage() {
       fetchCategories();
     }
   }, [status, session, router]);
-
+  // Función para obtener las categorías desde la API
   const fetchCategories = async () => {
     try {
       const res = await fetch('/api/categories');
@@ -57,21 +57,21 @@ export default function AdminCategoriesPage() {
       setLoading(false);
     }
   };
-
+  // Abrir el modal para crear una nueva categoría
   const openCreateModal = () => {
     setEditingCategory(null);
     setName('');
     setDescription('');
     setShowModal(true);
   };
-
+  // Abrir el modal para editar una categoría existente
   const openEditModal = (category: Category) => {
     setEditingCategory(category);
     setName(category.name);
     setDescription(category.description || '');
     setShowModal(true);
   };
-
+  // Manejar el envío del formulario de creación/edición
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -79,7 +79,7 @@ export default function AdminCategoriesPage() {
       name,
       description: description || null,
     };
-
+    // Determinar si se está creando o editando una categoría
     try {
       const url = editingCategory
         ? `/api/categories/${editingCategory.id}`
@@ -107,7 +107,7 @@ export default function AdminCategoriesPage() {
       toast.error('Error al guardar categoría');
     }
   };
-
+  //
   const handleDelete = async (id: string) => {
     if (!confirm('¿Estás seguro de eliminar esta categoría?')) return;
 

@@ -16,17 +16,18 @@ export const dynamic = "force-dynamic";
 // Endpoint para obtener el carrito de compras
 export async function GET() {
   try {
+    // Verificar sesión de usuario
     const session = await getServerSession(authOptions);
-
+    // Si no hay sesión, retornar no autorizado
     if (!session?.user) {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener el ID del usuario desde la sesión
     const userId = (session.user as any).id;
-
+    // Buscar los items del carrito para el usuario
     const cartItems = await prisma.cartItem.findMany({
       where: { userId },
       include: {
@@ -53,26 +54,27 @@ export async function GET() {
 // Endpoint para agregar un producto al carrito
 export async function POST(request: Request) {
   try {
+    // Verificar sesión de usuario
     const session = await getServerSession(authOptions);
-
+    // Si no hay sesión, retornar no autorizado
     if (!session?.user) {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener el ID del usuario desde la sesión
     const userId = (session.user as any).id;
     const body = await request.json();
     const { productId, quantity } = body;
-
+    // Validar datos de entrada
     if (!productId || !quantity || quantity < 1) {
       return NextResponse.json(
         { error: "Datos inválidos" },
         { status: 400 }
       );
     }
-
+    // Verificar si el item ya existe en el carrito
     const existingItem = await prisma.cartItem.findUnique({
       where: {
         userId_productId: {
@@ -81,9 +83,9 @@ export async function POST(request: Request) {
         },
       },
     });
-
+    // Si existe, actualizar la cantidad, si no, crear un nuevo item
     let cartItem;
-
+    // Actualizar cantidad si el item ya existe
     if (existingItem) {
       cartItem = await prisma.cartItem.update({
         where: { id: existingItem.id },
@@ -127,26 +129,27 @@ export async function POST(request: Request) {
 // Endpoint para actualizar la cantidad de un producto en el carrito
 export async function PUT(request: Request) {
   try {
+    // Verificar sesión de usuario
     const session = await getServerSession(authOptions);
-
+    // Si no hay sesión, retornar no autorizado
     if (!session?.user) {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener el ID del usuario desde la sesión
     const userId = (session.user as any).id;
     const body = await request.json();
     const { cartItemId, quantity } = body;
-
+    // Validar datos de entrada
     if (!cartItemId || quantity < 1) {
       return NextResponse.json(
         { error: "Datos inválidos" },
         { status: 400 }
       );
     }
-
+    // Actualizar la cantidad del item en el carrito
     const cartItem = await prisma.cartItem.update({
       where: {
         id: cartItemId,
@@ -175,6 +178,7 @@ export async function PUT(request: Request) {
 }
 // Endpoint para eliminar un producto del carrito
 export async function DELETE(request: Request) {
+  // Verificar sesión de usuario
   try {
     const session = await getServerSession(authOptions);
 
@@ -184,18 +188,18 @@ export async function DELETE(request: Request) {
         { status: 401 }
       );
     }
-
+    // Obtener el ID del usuario desde la sesión
     const userId = (session.user as any).id;
     const { searchParams } = new URL(request.url);
     const cartItemId = searchParams.get("cartItemId");
-
+    // Validar datos de entrada
     if (!cartItemId) {
       return NextResponse.json(
         { error: "ID del item requerido" },
         { status: 400 }
       );
     }
-
+    // Eliminar el item del carrito
     await prisma.cartItem.delete({
       where: {
         id: cartItemId,

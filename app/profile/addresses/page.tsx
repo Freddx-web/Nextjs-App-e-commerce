@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { MapPin, Plus, Edit, Trash2 } from 'lucide-react';
 
+// Define the Address interface
 interface Address {
   id: string;
   name: string;
@@ -20,8 +21,9 @@ interface Address {
   phone?: string;
   isDefault: boolean;
 }
-
+// Main Addresses Page Component
 export default function AddressesPage() {
+  // State management
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -35,11 +37,11 @@ export default function AddressesPage() {
     phone: '',
     isDefault: false,
   });
-
+  // Load addresses on component mount
   useEffect(() => {
     loadAddresses();
   }, []);
-
+  // Function to load addresses from API
   const loadAddresses = async () => {
     try {
       const response = await fetch('/api/profile/addresses');
@@ -53,7 +55,7 @@ export default function AddressesPage() {
       setIsLoading(false);
     }
   };
-
+  // Reset form data
   const resetForm = () => {
     setFormData({
       name: '',
@@ -66,7 +68,7 @@ export default function AddressesPage() {
     });
     setEditingAddress(null);
   };
-
+  // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -74,18 +76,19 @@ export default function AddressesPage() {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
-
+  // Handle form submission for adding/editing addresses
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+    // Validate required fields
     try {
+      // Prepare request data
       const url = editingAddress 
         ? `/api/profile/addresses/${editingAddress.id}`
         : '/api/profile/addresses';
-      
+      // Determine HTTP method
       const method = editingAddress ? 'PUT' : 'POST';
-
+      // Send request to API
       const response = await fetch(url, {
         method,
         headers: {
@@ -93,12 +96,13 @@ export default function AddressesPage() {
         },
         body: JSON.stringify(formData),
       });
-
+      // Handle response
       if (!response.ok) {
         throw new Error(editingAddress ? 'Error al actualizar la dirección' : 'Error al crear la dirección');
       }
-
+      // Success
       toast.success(editingAddress ? 'Dirección actualizada correctamente' : 'Dirección creada correctamente');
+      // Close dialog and reset form
       setIsDialogOpen(false);
       resetForm();
       loadAddresses();
@@ -109,9 +113,11 @@ export default function AddressesPage() {
       setIsLoading(false);
     }
   };
-
+  // Handle editing an address
   const handleEdit = (address: Address) => {
+    // Populate form with existing address data
     setEditingAddress(address);
+    // Fill form data
     setFormData({
       name: address.name,
       street: address.street,
@@ -123,39 +129,41 @@ export default function AddressesPage() {
     });
     setIsDialogOpen(true);
   };
-
+  // Handle deleting an address
   const handleDelete = async (addressId: string) => {
     if (!confirm('¿Estás seguro de que quieres eliminar esta dirección?')) {
       return;
     }
-
+    // Proceed with deletion
     try {
       const response = await fetch(`/api/profile/addresses/${addressId}`, {
         method: 'DELETE',
       });
-
+      // Handle response
       if (!response.ok) {
         throw new Error('Error al eliminar la dirección');
       }
-
+      // Success
       toast.success('Dirección eliminada correctamente');
+      // Reload addresses
       loadAddresses();
     } catch (error) {
       toast.error('Error al eliminar la dirección');
       console.error(error);
     }
   };
-
+  // Set an address as default
   const setDefaultAddress = async (addressId: string) => {
+    // Send request to set default address
     try {
       const response = await fetch(`/api/profile/addresses/${addressId}/default`, {
         method: 'PUT',
       });
-
+      // Handle response
       if (!response.ok) {
         throw new Error('Error al establecer dirección por defecto');
       }
-
+      // Success
       toast.success('Dirección principal actualizada');
       loadAddresses();
     } catch (error) {
@@ -163,7 +171,7 @@ export default function AddressesPage() {
       console.error(error);
     }
   };
-
+  // Render loading state
   if (isLoading && addresses.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -171,7 +179,7 @@ export default function AddressesPage() {
       </div>
     );
   }
-
+  // Render main component
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">

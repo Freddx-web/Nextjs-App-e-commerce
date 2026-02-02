@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 // This ensures that the API routes are not cached and always fetch fresh data.
 export async function GET() {
   try {
+    // Fetch user session
     const session = await getServerSession(authOptions);
-    
+    // Check if the user is authenticated
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
-
+    // Fetch user profile from the database
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
       select: {
@@ -24,11 +25,11 @@ export async function GET() {
         image: true,
       },
     });
-
+    // If user not found, return error
     if (!user) {
       return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
     }
-
+    // Return the user profile data
     return NextResponse.json(user);
   } catch (error) {
     console.error('Error fetching profile:', error);

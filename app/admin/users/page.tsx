@@ -25,6 +25,7 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Efecto para verificar la sesión y el rol del usuario
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
@@ -40,6 +41,7 @@ export default function AdminUsersPage() {
     }
   }, [status, session, router]);
 
+  // Función para obtener los usuarios desde la API
   const fetchUsers = async () => {
     try {
       const res = await fetch('/api/users');
@@ -53,12 +55,12 @@ export default function AdminUsersPage() {
       setLoading(false);
     }
   };
-
+  // Función para cambiar el rol de un usuario
   const toggleRole = async (userId: string, currentRole: string) => {
     const newRole = currentRole === 'ADMIN' ? 'CUSTOMER' : 'ADMIN';
-    
+    // Confirmar el cambio de rol
     if (!confirm(`¿Cambiar rol a ${newRole}?`)) return;
-
+    // Llamada a la API para actualizar el rol del usuario
     try {
       const res = await fetch(`/api/users/${userId}`, {
         method: 'PUT',

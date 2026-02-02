@@ -10,6 +10,7 @@ import { authOptions } from "@/lib/auth-options";
 export const dynamic = "force-dynamic";
 // Endpoint para obtener las estadísticas del panel de administración
 export async function GET() {
+  // Verificar sesión y rol de usuario
   try {
     const session = await getServerSession(authOptions);
 
@@ -29,14 +30,12 @@ export async function GET() {
       },
     });
 
+    // Calcular el total de ingresos
     const totalRevenue = orders.reduce((sum: number, order: any) => sum + order.total, 0);
-
     // Total orders
     const totalOrders = await prisma.order.count();
-
     // Total products
     const totalProducts = await prisma.product.count();
-
     // Total users
     const totalUsers = await prisma.user.count();
 
@@ -53,7 +52,7 @@ export async function GET() {
       },
       take: 5,
     });
-
+    // Fetch product details for top products
     const topProductsWithDetails = await Promise.all(
       topProducts.map(async (item: any) => {
         const product = await prisma.product.findUnique({
@@ -95,7 +94,12 @@ export async function GET() {
         id: true,
       },
     });
-
+    // Formatear los resultados de ordersByStatus
+    const formattedOrdersByStatus: { [key: string]: number } = {};
+    ordersByStatus.forEach((item: any) => {
+      formattedOrdersByStatus[item.status] = item._count.id;
+    });
+    // Construir el objeto de estadísticas
     const stats = {
       totalRevenue,
       totalOrders,
@@ -103,7 +107,7 @@ export async function GET() {
       totalUsers,
       topProducts: topProductsWithDetails,
       recentOrders,
-      ordersByStatus,
+      ordersByStatus: formattedOrdersByStatus,
     };
 
     return NextResponse.json(stats);

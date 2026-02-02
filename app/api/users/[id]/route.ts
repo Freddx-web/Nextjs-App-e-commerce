@@ -12,26 +12,28 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  // Autorización y Validación
   try {
+    // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
-
+    // Verificar si el usuario es administrador
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Parsear el cuerpo de la solicitud
     const body = await request.json();
     const { role } = body;
-
+    // Validar el rol
     if (!role || (role !== "CUSTOMER" && role !== "ADMIN")) {
       return NextResponse.json(
         { error: "Rol inválido" },
         { status: 400 }
       );
     }
-
+    // Actualizar el usuario en la base de datos
     const user = await prisma.user.update({
       where: { id: params.id },
       data: { role },
@@ -43,7 +45,7 @@ export async function PUT(
         createdAt: true,
       },
     });
-
+    // Retornar la respuesta con el usuario actualizado
     return NextResponse.json(user);
   } catch (error) {
     console.error("Error updating user:", error);

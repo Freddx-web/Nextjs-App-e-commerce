@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 
+// Define the Product type
 interface Product {
   id: string;
   name: string;
@@ -20,21 +21,22 @@ interface Product {
     name: string;
   };
 }
-
+// Main Product Detail Page Component
 export default function ProductDetailPage() {
+  // State and Hooks
   const params = useParams();
   const router = useRouter();
   const { data: session } = useSession() || {};
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-
+  // Fetch product details when component mounts or params.id changes
   useEffect(() => {
     if (params?.id) {
       fetchProduct();
     }
   }, [params?.id]);
-
+  // Fetch product from the API
   const fetchProduct = async () => {
     try {
       const res = await fetch(`/api/products/${params?.id}`);
@@ -52,13 +54,13 @@ export default function ProductDetailPage() {
       setLoading(false);
     }
   };
-
+  // Handle adding product to cart
   const addToCart = async () => {
     if (!session) {
       router.push('/login');
       return;
     }
-
+    // Add product to cart via API
     try {
       const res = await fetch('/api/cart', {
         method: 'POST',
@@ -68,7 +70,7 @@ export default function ProductDetailPage() {
           quantity,
         }),
       });
-
+      // Handle response
       if (res.ok) {
         toast.success('Producto agregado al carrito');
         router.push('/cart');
@@ -80,7 +82,7 @@ export default function ProductDetailPage() {
       toast.error('Error al agregar al carrito');
     }
   };
-
+  // Render loading state
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -88,11 +90,11 @@ export default function ProductDetailPage() {
       </div>
     );
   }
-
+  // If no product found, return null
   if (!product) {
     return null;
   }
-
+  // Render product detail page
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

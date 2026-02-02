@@ -6,21 +6,24 @@ import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './ui/button';
 
+// Props for the ProductPhotoAlbum component
 interface ProductPhotoAlbumProps {
   images: string[];
   productName: string;
   initialIndex?: number;
 }
-
+// ProductPhotoAlbum Component
 export function ProductPhotoAlbum({ images, productName, initialIndex = 0 }: ProductPhotoAlbumProps) {
+  // State management
   const [selectedIndex, setSelectedIndex] = useState(initialIndex);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
 
   // Handle keyboard navigation
   useEffect(() => {
+    // Only add event listener when lightbox is open
     if (!isLightboxOpen) return;
-
+    // Keyboard event handler
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsLightboxOpen(false);
@@ -31,26 +34,27 @@ export function ProductPhotoAlbum({ images, productName, initialIndex = 0 }: Pro
         handleNext();
       }
     };
-
+    // Attach event listener
     window.addEventListener('keydown', handleKeyDown);
+    // Cleanup event listener on unmount or when lightbox closes
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isLightboxOpen, selectedIndex]);
-
+  // Handlers for navigation
   const handlePrevious = () => {
     setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
     setIsZoomed(false);
   };
-
+  // Handler for next image
   const handleNext = () => {
     setSelectedIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
     setIsZoomed(false);
   };
-
+  // Open lightbox at specific index
   const openLightbox = (index: number) => {
     setSelectedIndex(index);
     setIsLightboxOpen(true);
   };
-
+  // Render component
   if (!images || images.length === 0) {
     return (
       <div className="flex h-full items-center justify-center text-gray-400 bg-gray-100 rounded-lg">
@@ -58,7 +62,7 @@ export function ProductPhotoAlbum({ images, productName, initialIndex = 0 }: Pro
       </div>
     );
   }
-
+  // Main return
   return (
     <>
       {/* Thumbnail Gallery */}

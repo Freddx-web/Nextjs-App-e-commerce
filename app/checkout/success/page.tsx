@@ -7,11 +7,12 @@ import { CheckCircle, Package } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function CheckoutSuccessPage() {
+  // Hooks
   const searchParams = useSearchParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const sessionId = searchParams?.get('session_id');
-
+  // Effects
   useEffect(() => {
     if (sessionId) {
       // Wait a bit for webhook to process
@@ -22,7 +23,7 @@ export default function CheckoutSuccessPage() {
       setLoading(false);
     }
   }, [sessionId]);
-
+  // Render
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">

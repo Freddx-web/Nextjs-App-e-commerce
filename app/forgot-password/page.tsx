@@ -6,12 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-
+// Importa aquí cualquier otra dependencia necesaria
 export default function ForgotPasswordPage() {
+  // Estado para el email, carga y envío
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
+  // Maneja el envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

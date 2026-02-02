@@ -9,7 +9,7 @@
  */
 import NextAuth from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-
+// Configurar NextAuth con las opciones de autenticación
 const handler = NextAuth(authOptions);
-
+// Exportar los manejadores para los métodos GET y POST
 export { handler as GET, handler as POST };

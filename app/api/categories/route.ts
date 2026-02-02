@@ -16,6 +16,7 @@ export const dynamic = "force-dynamic";
 // Endpoint para obtener las categorías
 export async function GET() {
   try {
+    // Obtener categorías ordenadas por nombre ascendente con conteo de productos
     const categories = await prisma.category.findMany({
       orderBy: {
         name: "asc",
@@ -38,31 +39,33 @@ export async function GET() {
 }
 // Endpoint para crear una nueva categoría
 export async function POST(request: Request) {
+  // Crear una nueva categoría
   try {
+    // Verificar sesión y rol de usuario
     const session = await getServerSession(authOptions);
-
+    // Verificar si el usuario tiene rol de ADMIN
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener datos del cuerpo de la solicitud 
     const body = await request.json();
     const { name, description } = body;
-
+    // Validar que el nombre esté presente
     if (!name) {
       return NextResponse.json(
         { error: "El nombre es requerido" },
         { status: 400 }
       );
     }
-
+    // Generar slug a partir del nombre
     const slug = name
       .toLowerCase()
       .replace(/[^\w\s-]/g, "")
       .replace(/\s+/g, "-");
-
+    // Crear la categoría en la base de datos
     const category = await prisma.category.create({
       data: {
         name,

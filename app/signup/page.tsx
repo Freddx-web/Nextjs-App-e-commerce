@@ -9,34 +9,35 @@ import { Input } from '@/components/ui/input';
 import { Mail, Lock, User, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-
+// Signup page component
 export default function SignupPage() {
+  // Form state
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
+    // Call signup API
     try {
       const res = await fetch('/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password, phone }),
       });
-
+      // Parse response
       const data = await res.json();
-
+      // Handle errors
       if (!res.ok) {
         toast.error(data.error || 'Error al registrarse');
         setLoading(false);
         return;
       }
-
+      
       toast.success('Cuenta creada exitosamente');
 
       // Auto login after signup
@@ -45,7 +46,7 @@ export default function SignupPage() {
         password,
         redirect: false,
       });
-
+      // Handle login result
       if (result?.error) {
         toast.error('Error al iniciar sesión');
         router.push('/login');
@@ -59,7 +60,7 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
-
+  // Render signup form
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-[#60B5FF] to-[#4A9FE8] py-12 px-4">
       <motion.div
