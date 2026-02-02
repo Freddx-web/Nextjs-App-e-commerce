@@ -32,6 +32,7 @@ model User {
   image         String?
   password      String?
   phone         String?
+  address       String?   @db.Text
   role          Role      @default(CUSTOMER)
   settings      String?   @db.Text
   accounts      Account[]
