@@ -11,6 +11,7 @@ import {
   ShoppingCart,
   LogOut,
   ChevronLeft,
+  Home,
   Menu,
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
@@ -22,6 +23,11 @@ const menuItems = [
     title: 'Dashboard',
     href: '/admin',
     icon: LayoutDashboard,
+  },
+  {
+    title: 'Inicio',
+    href: '/',
+    icon: Home,
   },
   {
     title: 'Productos',

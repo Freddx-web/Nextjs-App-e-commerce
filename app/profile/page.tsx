@@ -43,20 +43,16 @@ export default function ProfilePage() {
   useEffect(() => {
     if (session?.user) {
       const user = session.user as ExtendedUser;
-      setProfile({
+      // Si ya hay un perfil cargado (por edición), no sobrescribir los datos editados
+      setProfile(prev => ({
         id: user.id || '',
-        name: user.name || '',
+        name: user.name || prev?.name || '',
         email: user.email || '',
-        phone: '',
-        address: '',
-        createdAt: new Date().toISOString(),
+        phone: prev?.phone || '',
+        address: prev?.address || '',
+        createdAt: prev?.createdAt || new Date().toISOString(),
         image: user.image || '',
-      });
-      setFormData({
-        name: user.name || '',
-        phone: '',
-        address: '',
-      });
+      }));
     }
   }, [session]);
 
@@ -87,13 +83,19 @@ export default function ProfilePage() {
 
       const updatedProfile = await response.json();
       setProfile(updatedProfile);
-      
-      // Update session
+      setFormData({
+        name: updatedProfile.name || '',
+        phone: updatedProfile.phone || '',
+        address: updatedProfile.address || '',
+      });
+
+      // Update session (solo nombre e imagen, el resto no está en session por defecto)
       await update({
         ...session,
         user: {
           ...session?.user,
-          name: formData.name,
+          name: updatedProfile.name,
+          image: updatedProfile.image,
         }
       });
 
@@ -108,6 +110,7 @@ export default function ProfilePage() {
   };
 
   const handleCancel = () => {
+    // Restaurar los datos actuales del perfil al formulario
     setFormData({
       name: profile?.name || '',
       phone: profile?.phone || '',

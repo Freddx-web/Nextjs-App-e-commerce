@@ -1,0 +1,17 @@
+
+
+TAREAS:
+
+RUTA: /admin/users
+1. Crear la Opcion de Editar, Guardar, Eliminar
+   Usuarios o Administrador de la app
+
+2. Crear Pasarela de pago de Binance y Cuenta Bancaria
+   Pago Mobil 
+
+3. Gestionar Ordenes de Envio de Productos
+
+4. Crear metodo de recuperacion e contraseñas o Cuenta
+   para los usaurios por correo
+
+5. Crear y Gestionar las direciones para entrega de productos.
