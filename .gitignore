@@ -6,6 +6,7 @@ node_modules
 /node_modules
 /build
 .build
+node.txt
 
 # OS
 .DS_Store
