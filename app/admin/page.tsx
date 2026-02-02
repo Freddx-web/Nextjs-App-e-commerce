@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { DollarSign, Package, ShoppingCart, Users, TrendingUp } from 'lucide-react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, Cell } from 'recharts';
 
+// Definición de tipos para las estadísticas
 interface Stats {
   totalRevenue: number;
   totalOrders: number;
@@ -28,7 +29,8 @@ export default function AdminDashboard() {
   const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
-
+  
+  // Verificación de autenticación y rol de usuario
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
@@ -44,6 +46,7 @@ export default function AdminDashboard() {
     }
   }, [status, session, router]);
 
+  // Función para obtener las estadísticas del servidor
   const fetchStats = async () => {
     try {
       const res = await fetch('/api/admin/stats');
@@ -57,7 +60,7 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
-
+  // Renderizado condicional basado en el estado de carga
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -65,17 +68,17 @@ export default function AdminDashboard() {
       </div>
     );
   }
-
+  // Preparación de datos para los gráficos
   const statusData = stats?.ordersByStatus?.map?.(item => ({
     name: item.status,
     cantidad: item?._count?.id ?? 0,
   })) ?? [];
-
+  // Datos para productos más vendidos
   const topProductsData = stats?.topProducts?.map?.(p => ({
     nombre: p?.name?.substring?.(0, 15) ?? 'Sin nombre',
     vendidos: p?.totalSold ?? 0,
   })) ?? [];
-
+  // Colores para los gráficos
   const COLORS = ['#60B5FF', '#FF9149', '#FF9898', '#80D8C3', '#A19AD3'];
 
   return (

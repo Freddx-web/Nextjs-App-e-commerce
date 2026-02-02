@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { Bell, Shield, Palette, Globe } from 'lucide-react';
 
+// Define the shape of user settings
 interface UserSettings {
   emailNotifications: boolean;
   smsNotifications: boolean;
@@ -20,8 +21,11 @@ interface UserSettings {
   theme: 'light' | 'dark' | 'system';
 }
 
+// Main Settings Page Component
 export default function SettingsPage() {
+  // Session data
   const { data: session } = useSession();
+  // State for user settings
   const [settings, setSettings] = useState<UserSettings>({
     emailNotifications: true,
     smsNotifications: false,
@@ -30,18 +34,20 @@ export default function SettingsPage() {
     language: 'es',
     theme: 'system',
   });
+  // Loading state
   const [isLoading, setIsLoading] = useState(false);
+  // State for password change form
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
-
+  // Load user settings on component mount
   useEffect(() => {
     // Load user settings from API
     loadSettings();
   }, []);
-
+  // Function to load user settings
   const loadSettings = async () => {
     try {
       const response = await fetch('/api/profile/settings');
@@ -53,14 +59,14 @@ export default function SettingsPage() {
       console.error('Error loading settings:', error);
     }
   };
-
+  // Handle changes to settings
   const handleSettingChange = (key: keyof UserSettings, value: any) => {
     setSettings(prev => ({
       ...prev,
       [key]: value
     }));
   };
-
+  // Save settings to the server
   const saveSettings = async () => {
     setIsLoading(true);
     try {
@@ -84,22 +90,23 @@ export default function SettingsPage() {
       setIsLoading(false);
     }
   };
-
+  // Handle password change form submission
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    // Basic validation
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast.error('Las contraseñas no coinciden');
       return;
     }
-
+    // Example password strength check
     if (passwordData.newPassword.length < 8) {
       toast.error('La contraseña debe tener al menos 8 caracteres');
       return;
     }
-
+    // Send password change request to server
     setIsLoading(true);
     try {
+      // API call to change password
       const response = await fetch('/api/profile/password', {
         method: 'PUT',
         headers: {
@@ -110,12 +117,13 @@ export default function SettingsPage() {
           newPassword: passwordData.newPassword,
         }),
       });
-
+      // Handle response
       if (!response.ok) {
         throw new Error('Error al cambiar la contraseña');
       }
-
+      // Success
       toast.success('Contraseña cambiada correctamente');
+      // Clear password fields
       setPasswordData({
         currentPassword: '',
         newPassword: '',

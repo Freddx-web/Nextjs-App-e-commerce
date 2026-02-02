@@ -5,9 +5,9 @@ import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-
+// Main Accordion component
 const Accordion = AccordionPrimitive.Root;
-
+// Accordion Item component
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
@@ -18,8 +18,9 @@ const AccordionItem = React.forwardRef<
     {...props}
   />
 ));
+// Set display name for better debugging
 AccordionItem.displayName = 'AccordionItem';
-
+// Accordion Trigger component
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
@@ -38,8 +39,9 @@ const AccordionTrigger = React.forwardRef<
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
+// Set display name for better debugging
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
-
+// Accordion Content component
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
@@ -52,7 +54,7 @@ const AccordionContent = React.forwardRef<
     <div className={cn('pb-4 pt-0', className)}>{children}</div>
   </AccordionPrimitive.Content>
 ));
-
+// Set display name for better debugging
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };

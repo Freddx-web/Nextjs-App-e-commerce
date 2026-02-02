@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { ShoppingBag, Package, Truck, CheckCircle, XCircle } from 'lucide-react';
 
+// Types
 interface Order {
   id: string;
   status: 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
@@ -17,6 +18,7 @@ interface Order {
   items: OrderItem[];
 }
 
+// Order Item Type
 interface OrderItem {
   id: string;
   quantity: number;
@@ -27,6 +29,7 @@ interface OrderItem {
   };
 }
 
+// Status Configuration
 const statusConfig = {
   PENDING: { label: 'Pendiente', color: 'bg-yellow-100 text-yellow-800', icon: Package },
   PROCESSING: { label: 'Procesando', color: 'bg-blue-100 text-blue-800', icon: Package },
@@ -35,15 +38,17 @@ const statusConfig = {
   CANCELLED: { label: 'Cancelado', color: 'bg-red-100 text-red-800', icon: XCircle },
 };
 
+// Orders Page Component
 export default function OrdersPage() {
+  // State Management
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-
+  // Load Orders on Component Mount
   useEffect(() => {
     loadOrders();
   }, []);
-
+  // Fetch Orders from API
   const loadOrders = async () => {
     try {
       const response = await fetch('/api/profile/orders');
@@ -57,7 +62,7 @@ export default function OrdersPage() {
       setIsLoading(false);
     }
   };
-
+  // Render Loading State
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -65,14 +70,14 @@ export default function OrdersPage() {
       </div>
     );
   }
-
+  // Render Orders Page
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <ShoppingBag className="h-8 w-8" />
         <h1 className="text-3xl font-bold text-gray-900">Mis Pedidos</h1>
       </div>
-
+      
       {orders.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">

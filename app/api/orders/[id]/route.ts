@@ -13,24 +13,28 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 
 export const dynamic = "force-dynamic";
-
+// Revalidate every 10 seconds
+export const revalidate = 10;
+// Cache the response for 10 seconds
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  // Obtener la sesión del usuario
   try {
+    // Verificar si el usuario está autenticado
     const session = await getServerSession(authOptions);
-
+    // Si no está autenticado, devolver un error 401
     if (!session?.user) {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener el ID y rol del usuario de la sesión
     const userId = (session.user as any).id;
     const userRole = (session.user as any).role;
-
+    // Buscar la orden por ID
     const order = await prisma.order.findUnique({
       where: { id: params.id },
       include: {
@@ -48,14 +52,14 @@ export async function GET(
         },
       },
     });
-
+    // Si no se encuentra la orden, devolver un error 404
     if (!order) {
       return NextResponse.json(
         { error: "Orden no encontrada" },
         { status: 404 }
       );
     }
-
+    // Verificar si el usuario tiene permiso para ver la orden
     if (userRole !== "ADMIN" && order.userId !== userId) {
       return NextResponse.json(
         { error: "No autorizado" },
@@ -72,31 +76,33 @@ export async function GET(
     );
   }
 }
-
+// Endpoint para actualizar el estado de una orden
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  // Obtener la sesión del usuario
   try {
+    // Verificar si el usuario está autenticado y es ADMIN
     const session = await getServerSession(authOptions);
-
+    // Si no está autenticado o no es ADMIN, devolver un error 401
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Parsear el cuerpo de la solicitud
     const body = await request.json();
     const { status } = body;
-
+    // Validar el estado
     if (!status) {
       return NextResponse.json(
         { error: "Estado requerido" },
         { status: 400 }
       );
     }
-
+    // Actualizar el estado de la orden
     const order = await prisma.order.update({
       where: { id: params.id },
       data: { status },

@@ -45,7 +45,7 @@ export default function AdminOrdersPage() {
       fetchOrders();
     }
   }, [status, session, router]);
-
+  // Función para obtener las órdenes desde la API
   const fetchOrders = async () => {
     try {
       const res = await fetch('/api/orders');
@@ -59,13 +59,13 @@ export default function AdminOrdersPage() {
       setLoading(false);
     }
   };
-
+  // Función para abrir el modal de actualización de estado
   const openStatusModal = (order: Order) => {
     setSelectedOrder(order);
     setNewStatus(order.status);
     setShowModal(true);
   };
-
+  // Función para manejar la actualización del estado de la orden
   const handleUpdateStatus = async () => {
     if (!selectedOrder) return;
 
@@ -88,7 +88,7 @@ export default function AdminOrdersPage() {
       toast.error('Error al actualizar estado');
     }
   };
-
+  // Función para obtener el badge de estado
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
       PENDING: 'bg-yellow-100 text-yellow-800',
@@ -97,7 +97,7 @@ export default function AdminOrdersPage() {
       DELIVERED: 'bg-green-100 text-green-800',
       CANCELLED: 'bg-red-100 text-red-800',
     };
-
+    // Etiquetas en español para los estados
     const labels: Record<string, string> = {
       PENDING: 'Pendiente',
       PROCESSING: 'Procesando',

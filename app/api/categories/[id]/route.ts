@@ -19,20 +19,21 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Verificar sesión y rol de usuario
     const session = await getServerSession(authOptions);
-
+    // Verificar si el usuario tiene rol de ADMIN
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener datos del cuerpo de la solicitud
     const body = await request.json();
     const { name, description } = body;
-
+    // Construir objeto de actualización
     const updateData: any = {};
-
+    // Actualizar nombre y slug si se proporciona un nuevo nombre
     if (name) {
       updateData.name = name;
       updateData.slug = name
@@ -40,11 +41,11 @@ export async function PUT(
         .replace(/[^\w\s-]/g, "")
         .replace(/\s+/g, "-");
     }
-
+    // Actualizar descripción si se proporciona
     if (description !== undefined) {
       updateData.description = description || null;
     }
-
+    //
     const category = await prisma.category.update({
       where: { id: params.id },
       data: updateData,
@@ -64,16 +65,18 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  // Eliminar una categoría
   try {
+    // Verificar sesión y rol de usuario
     const session = await getServerSession(authOptions);
-
+    // Verificar si el usuario tiene rol de ADMIN
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Eliminar la categoría
     await prisma.category.delete({
       where: { id: params.id },
     });

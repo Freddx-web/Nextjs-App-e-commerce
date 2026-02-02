@@ -18,18 +18,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 // Endpoint para crear una sesión de pago
 export async function POST(request: Request) {
   try {
+    // Verificar sesión de usuario
     const session = await getServerSession(authOptions);
-
+    // Si no hay sesión, retornar error de no autorizado
     if (!session?.user) {
       return NextResponse.json(
         { error: 'No autorizado' },
         { status: 401 }
       );
     }
-
+    // Obtener datos del cuerpo de la solicitud
     const body = await request.json();
+    // Desestructurar los datos necesarios
     const { items, shippingName, shippingEmail, shippingAddress } = body;
-
+    // Validar que haya items en el carrito
     if (!items || items?.length === 0) {
       return NextResponse.json(
         { error: 'Items requeridos' },

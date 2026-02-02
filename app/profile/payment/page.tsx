@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { CreditCard, Plus, Edit, Trash2, Shield } from 'lucide-react';
 
+// Define the PaymentMethod interface
 interface PaymentMethod {
   id: string;
   type: 'credit' | 'debit';
@@ -20,8 +21,9 @@ interface PaymentMethod {
   holderName: string;
   isDefault: boolean;
 }
-
+// Main PaymentPage component
 export default function PaymentPage() {
+  // State variables
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -36,11 +38,11 @@ export default function PaymentPage() {
     cvv: '',
     isDefault: false,
   });
-
+  // Load payment methods on component mount
   useEffect(() => {
     loadPaymentMethods();
   }, []);
-
+  // Function to load payment methods from the server
   const loadPaymentMethods = async () => {
     try {
       const response = await fetch('/api/profile/payment');
@@ -54,7 +56,7 @@ export default function PaymentPage() {
       setIsLoading(false);
     }
   };
-
+  // Function to reset the form
   const resetForm = () => {
     setFormData({
       type: 'credit',
@@ -68,7 +70,7 @@ export default function PaymentPage() {
     });
     setEditingMethod(null);
   };
-
+  // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -76,14 +78,14 @@ export default function PaymentPage() {
       [name]: value
     }));
   };
-
+  // Handle select changes
   const handleSelectChange = (name: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
-
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -94,20 +96,32 @@ export default function PaymentPage() {
       setIsLoading(false);
       return;
     }
-
+    // Additional validations can be added here
     if (formData.cvv.length < 3) {
       toast.error('El CVV no es válido');
       setIsLoading(false);
       return;
     }
-
+    // Prepare data to send
+    const payload = {
+      type: formData.type,
+      brand: formData.brand,
+      cardNumber: formData.cardNumber.replace(/\s/g, ''),
+      holderName: formData.holderName,
+      expiryMonth: parseInt(formData.expiryMonth, 10),
+      expiryYear: parseInt(formData.expiryYear, 10),
+      cvv: formData.cvv,
+      isDefault: formData.isDefault,
+    };
+    // Send data to server
     try {
+      // Determine URL and method based on whether we're editing or adding
       const url = editingMethod 
         ? `/api/profile/payment/${editingMethod.id}`
         : '/api/profile/payment';
-      
+        
       const method = editingMethod ? 'PUT' : 'POST';
-
+      // Make the API request
       const response = await fetch(url, {
         method,
         headers: {
@@ -115,12 +129,13 @@ export default function PaymentPage() {
         },
         body: JSON.stringify(formData),
       });
-
+      // Handle response
       if (!response.ok) {
         throw new Error(editingMethod ? 'Error al actualizar el método de pago' : 'Error al añadir el método de pago');
       }
-
+      // Success
       toast.success(editingMethod ? 'Método de pago actualizado correctamente' : 'Método de pago añadido correctamente');
+      // Close dialog and refresh list
       setIsDialogOpen(false);
       resetForm();
       loadPaymentMethods();
@@ -131,8 +146,9 @@ export default function PaymentPage() {
       setIsLoading(false);
     }
   };
-
+  // Handle editing a payment method
   const handleEdit = (method: PaymentMethod) => {
+    // Populate form with existing data
     setEditingMethod(method);
     setFormData({
       type: method.type,
@@ -146,62 +162,69 @@ export default function PaymentPage() {
     });
     setIsDialogOpen(true);
   };
-
+  // Handle deleting a payment method
   const handleDelete = async (methodId: string) => {
     if (!confirm('¿Estás seguro de que quieres eliminar este método de pago?')) {
       return;
     }
-
+    // Proceed with deletion
     try {
+      // Make DELETE request to server
       const response = await fetch(`/api/profile/payment/${methodId}`, {
         method: 'DELETE',
       });
-
+      // Handle response
       if (!response.ok) {
         throw new Error('Error al eliminar el método de pago');
       }
-
+      // Success
       toast.success('Método de pago eliminado correctamente');
+      // Refresh payment methods list
       loadPaymentMethods();
     } catch (error) {
       toast.error('Error al eliminar el método de pago');
       console.error(error);
     }
   };
-
+  // Set a payment method as default
   const setDefaultMethod = async (methodId: string) => {
+    // Make API request to set default method
     try {
       const response = await fetch(`/api/profile/payment/${methodId}/default`, {
         method: 'PUT',
       });
-
+      // Handle response
       if (!response.ok) {
         throw new Error('Error al establecer método de pago por defecto');
       }
-
+      // Success
       toast.success('Método de pago principal actualizado');
+      // Refresh payment methods list
       loadPaymentMethods();
     } catch (error) {
       toast.error('Error al establecer método de pago principal');
       console.error(error);
     }
   };
-
+  // Format card number for display
   const formatCardNumber = (value: string) => {
+    // Remove all non-digit characters and format in groups of 4
     const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     const matches = v.match(/\d{4,16}/g);
     const match = matches && matches[0] || '';
     const parts = [];
+    // Split the card number into parts of 4 digits
     for (let i = 0, len = match.length; i < len; i += 4) {
       parts.push(match.substring(i, i + 4));
     }
+    // Join parts with spaces
     if (parts.length) {
       return parts.join(' ');
     } else {
       return v;
     }
   };
-
+  // Get card icon based on brand
   const getCardIcon = (brand: string) => {
     switch (brand) {
       case 'visa':
@@ -214,7 +237,7 @@ export default function PaymentPage() {
         return '💳';
     }
   };
-
+  // Render loading state
   if (isLoading && paymentMethods.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -222,7 +245,7 @@ export default function PaymentPage() {
       </div>
     );
   }
-
+  // Render main component
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">

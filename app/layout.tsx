@@ -5,8 +5,9 @@ import { Providers } from '@/components/providers';
 import { ConditionalLayout } from '@/components/conditional-layout';
 import { Toaster } from 'sonner';
 
+// Configuración de la fuente Inter
 const inter = Inter({ subsets: ['latin'] });
-
+// Forzar contenido dinámico
 export const dynamic = 'force-dynamic';
 // Metadata para la página
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
 };
-
+// Root layout component
 export default function RootLayout({
   children,
 }: {

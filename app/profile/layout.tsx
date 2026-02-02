@@ -1,5 +1,5 @@
 import { UserProfileLayout } from '@/components/user-profile-layout';
-
+// Profile layout component
 export default function ProfileLayout({
   children,
 }: {

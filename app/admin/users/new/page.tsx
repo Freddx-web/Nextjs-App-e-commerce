@@ -24,11 +24,11 @@ export default function NewUserPage() {
     password: '',
     role: 'CUSTOMER',
   });
-
+  // Manejar el envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
+    // Llamada a la API para crear un nuevo usuario
     try {
       const res = await fetch('/api/users', {
         method: 'POST',

@@ -26,20 +26,21 @@ interface Category {
 }
 // Componente principal
 export default function HomePage() {
+  // Estados para productos, categorías, filtros y carga
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
-
+  // Efectos para cargar categorías y productos
   useEffect(() => {
     fetchCategories();
   }, []);
-
+  // Efecto para cargar productos cuando cambian los filtros
   useEffect(() => {
     fetchProducts();
   }, [selectedCategory, searchQuery]);
-
+  // Funciones para obtener datos de la API
   const fetchCategories = async () => {
     try {
       const res = await fetch('/api/categories');
@@ -51,7 +52,7 @@ export default function HomePage() {
       console.error('Error fetching categories:', error);
     }
   };
-
+ // Función para obtener productos con filtros
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -70,7 +71,7 @@ export default function HomePage() {
       setLoading(false);
     }
   };
-
+  // Renderizado del componente
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}

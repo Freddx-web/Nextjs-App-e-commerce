@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+// Footer component
 export function Footer() {
   return (
     <footer className="w-full border-t bg-gray-50 py-8 mt-auto">
