@@ -10,16 +10,18 @@ import bcrypt from "bcryptjs";
 export const dynamic = "force-dynamic";
 // Obtener los Usuarios en el Administrador
 export async function GET() {
+  // Fetch users from the database
   try {
+    // Verificar sesión y rol de ADMIN
     const session = await getServerSession(authOptions);
-
+    //console.log("Session:", session);
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener usuarios
     const users = await prisma.user.findMany({
       select: {
         id: true,
@@ -37,7 +39,7 @@ export async function GET() {
         createdAt: "desc",
       },
     });
-
+    // Response
     return NextResponse.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -50,15 +52,16 @@ export async function GET() {
 // Cargar los datos de los Usuarios en el Administrador
 export async function POST(request: Request) {
   try {
+    // Verificar sesión y rol de ADMIN
     const session = await getServerSession(authOptions);
-
+    //console.log("Session:", session);
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener datos del body
     const body = await request.json();
     const { name, email, password, role } = body;
 
@@ -81,7 +84,7 @@ export async function POST(request: Request) {
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
-
+    //console.log("Existing User:", existingUser);
     if (existingUser) {
       return NextResponse.json(
         { error: "El email ya está registrado" },

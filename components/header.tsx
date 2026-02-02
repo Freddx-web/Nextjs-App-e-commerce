@@ -5,16 +5,17 @@ import { useSession, signOut } from 'next-auth/react';
 import { ShoppingCart, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
-
+// Header component
 export function Header() {
+  // Get session data
   const { data: session, status } = useSession() || {};
   const [cartCount, setCartCount] = useState(0);
   const [mounted, setMounted] = useState(false);
-
+  // Ensure component is mounted before rendering
   useEffect(() => {
     setMounted(true);
   }, []);
-
+  // Fetch cart count when session changes
   useEffect(() => {
     if (session?.user) {
       fetchCartCount();
@@ -29,7 +30,7 @@ export function Header() {
       setCartCount(0);
     }
   }, [session]);
-
+  // Function to fetch cart data and update count
   const fetchCartCount = async () => {
     try {
       const res = await fetch('/api/cart');
@@ -43,13 +44,13 @@ export function Header() {
       console.error('Error fetching cart:', error);
     }
   };
-
+  // Do not render until mounted to avoid hydration issues
   if (!mounted) {
     return null;
   }
-
+  // Check if user is admin
   const isAdmin = (session?.user as any)?.role === 'ADMIN';
-
+  // Render header
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -5,9 +5,11 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import { uploadToCloudinary } from '@/lib/cloudinary';
-
+// POST /api/upload/cloudinary
 export async function POST(request: Request) {
+  // Handle authentication
   try {
+    // Get user session
     const session = await getServerSession(authOptions);
 
     // Check authentication and admin role
@@ -17,10 +19,10 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
-
+    // Parse form data
     const formData = await request.formData();
     const file = formData.get('file') as File;
-
+    // Validate file presence
     if (!file) {
       return NextResponse.json(
         { error: 'No se proporcionó ningún archivo' },
@@ -38,7 +40,7 @@ export async function POST(request: Request) {
       file.name,
       'ecommerce/products'
     );
-
+    // Return success response
     return NextResponse.json({
       url: result.url,
       publicId: result.publicId,

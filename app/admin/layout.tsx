@@ -2,19 +2,21 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth-options';
 import { AdminSidebar } from '@/components/admin-sidebar';
+
 // Layout para el panel de administración
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Obtener la sesión del usuario
   const session = await getServerSession(authOptions);
 
   // Check if user is authenticated and is admin
   if (!session?.user) {
     redirect('/login');
   }
-
+  // Verificar si el usuario tiene rol de administrador
   if ((session.user as any).role !== 'ADMIN') {
     redirect('/');
   }

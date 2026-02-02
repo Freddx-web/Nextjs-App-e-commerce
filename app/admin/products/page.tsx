@@ -22,7 +22,7 @@ interface Product {
     name: string;
   };
 }
-
+// Interfaces para las categorías
 interface Category {
   id: string;
   name: string;
@@ -45,6 +45,7 @@ export default function AdminProductsPage() {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 
+  // Verificar autenticación y rol de usuario
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
@@ -61,6 +62,7 @@ export default function AdminProductsPage() {
     }
   }, [status, session, router]);
 
+  // Función para obtener los productos desde la API
   const fetchProducts = async () => {
     try {
       const res = await fetch('/api/products');
@@ -74,7 +76,7 @@ export default function AdminProductsPage() {
       setLoading(false);
     }
   };
-
+  // Función para obtener las categorías desde la API
   const fetchCategories = async () => {
     try {
       const res = await fetch('/api/categories');
@@ -86,14 +88,14 @@ export default function AdminProductsPage() {
       console.error('Error fetching categories:', error);
     }
   };
-
+  // Función para manejar la subida de imágenes
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-
+    
     setUploading(true);
     const newImages: string[] = [];
-
+    // Subir cada archivo a Cloudinary
     try {
       for (const file of Array.from(files)) {
         // Create FormData
@@ -124,7 +126,8 @@ export default function AdminProductsPage() {
       setUploading(false);
     }
   };
-
+  
+  // Funciones para abrir el modal de creación y edición
   const openCreateModal = () => {
     setEditingProduct(null);
     setName('');
@@ -135,7 +138,8 @@ export default function AdminProductsPage() {
     setUploadedImages([]);
     setShowModal(true);
   };
-
+  
+  // Función para abrir el modal de edición
   const openEditModal = (product: Product) => {
     setEditingProduct(product);
     setName(product.name);
@@ -146,10 +150,15 @@ export default function AdminProductsPage() {
     setUploadedImages(product.images || []);
     setShowModal(true);
   };
-
+  
+  // Función para manejar el envío del formulario de creación/edición
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    // Validar campos
+    if (!name || !description || !price || !stock || !categoryId) {
+      toast.error('Por favor completa todos los campos');
+      return;
+    }
     const productData = {
       name,
       description,
@@ -158,7 +167,7 @@ export default function AdminProductsPage() {
       categoryId,
       images: uploadedImages,
     };
-
+    // Enviar datos a la API
     try {
       const url = editingProduct
         ? `/api/products/${editingProduct.id}`
@@ -186,10 +195,10 @@ export default function AdminProductsPage() {
       toast.error('Error al guardar producto');
     }
   };
-
+  // Función para manejar la eliminación de un producto
   const handleDelete = async (id: string) => {
     if (!confirm('¿Estás seguro de eliminar este producto?')) return;
-
+    // Enviar solicitud de eliminación a la API
     try {
       const res = await fetch(`/api/products/${id}`, {
         method: 'DELETE',

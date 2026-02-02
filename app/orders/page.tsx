@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Package, Eye } from 'lucide-react';
 
+// Define the Order type
 interface Order {
   id: string;
   status: string;
@@ -20,13 +21,14 @@ interface Order {
     };
   }[];
 }
-
+// Main Orders Page Component
 export default function OrdersPage() {
+  // State and Hooks
   const { data: session, status } = useSession() || {};
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-
+  // Redirect unauthenticated users and fetch orders for authenticated users
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
@@ -36,7 +38,7 @@ export default function OrdersPage() {
       fetchOrders();
     }
   }, [status, router]);
-
+  // Fetch orders from the API
   const fetchOrders = async () => {
     try {
       const res = await fetch('/api/orders');
@@ -50,7 +52,7 @@ export default function OrdersPage() {
       setLoading(false);
     }
   };
-
+  // Function to get status badge styles and labels
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
       PENDING: 'bg-yellow-100 text-yellow-800',
@@ -59,7 +61,7 @@ export default function OrdersPage() {
       DELIVERED: 'bg-green-100 text-green-800',
       CANCELLED: 'bg-red-100 text-red-800',
     };
-
+    // Status labels in Spanish
     const labels: Record<string, string> = {
       PENDING: 'Pendiente',
       PROCESSING: 'Procesando',
@@ -67,14 +69,14 @@ export default function OrdersPage() {
       DELIVERED: 'Entregado',
       CANCELLED: 'Cancelado',
     };
-
+    // Return the styled badge
     return (
       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${styles[status] || ''}`}>
         {labels[status] || status}
       </span>
     );
   };
-
+  // Render loading state
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -82,7 +84,7 @@ export default function OrdersPage() {
       </div>
     );
   }
-
+  // Render orders page
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">

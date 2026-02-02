@@ -9,6 +9,7 @@ import { ArrowLeft, Package } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 
+// Define the Order type
 interface Order {
   id: string;
   status: string;
@@ -28,14 +29,15 @@ interface Order {
     };
   }[];
 }
-
+// Main component
 export default function OrderDetailPage() {
+  // Hooks and state
   const params = useParams();
   const router = useRouter();
   const { status } = useSession() || {};
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-
+  // Fetch order on mount or when params change
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
@@ -45,7 +47,7 @@ export default function OrderDetailPage() {
       fetchOrder();
     }
   }, [status, params?.id, router]);
-
+  // Fetch order function
   const fetchOrder = async () => {
     try {
       const res = await fetch(`/api/orders/${params?.id}`);
@@ -63,7 +65,7 @@ export default function OrderDetailPage() {
       setLoading(false);
     }
   };
-
+  // Status badge helper
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
       PENDING: 'bg-yellow-100 text-yellow-800',
@@ -72,7 +74,7 @@ export default function OrderDetailPage() {
       DELIVERED: 'bg-green-100 text-green-800',
       CANCELLED: 'bg-red-100 text-red-800',
     };
-
+    // Status labels in Spanish
     const labels: Record<string, string> = {
       PENDING: 'Pendiente',
       PROCESSING: 'Procesando',
@@ -80,14 +82,14 @@ export default function OrderDetailPage() {
       DELIVERED: 'Entregado',
       CANCELLED: 'Cancelado',
     };
-
+    // Return styled badge
     return (
       <span className={`px-4 py-2 rounded-full text-sm font-semibold ${styles[status] || ''}`}>
         {labels[status] || status}
       </span>
     );
   };
-
+  // Render loading state
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -95,7 +97,7 @@ export default function OrderDetailPage() {
       </div>
     );
   }
-
+  // Render null if no order
   if (!order) {
     return null;
   }

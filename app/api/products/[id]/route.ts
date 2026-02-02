@@ -13,21 +13,23 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  // Obtener el producto por ID
   try {
+    // Buscar el producto en la base de datos
     const product = await prisma.product.findUnique({
       where: { id: params.id },
       include: {
         category: true,
       },
     });
-
+    // Si no se encuentra el producto, devolver un error 404
     if (!product) {
       return NextResponse.json(
         { error: "Producto no encontrado" },
         { status: 404 }
       );
     }
-
+    // Devolver el producto encontrado
     return NextResponse.json(product);
   } catch (error) {
     console.error("Error fetching product:", error);
@@ -42,19 +44,21 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  // Actualizar el producto por ID
   try {
+    // Verificar la sesión del usuario
     const session = await getServerSession(authOptions);
-
+    // Solo los administradores pueden actualizar productos
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Obtener los datos del cuerpo de la solicitud
     const body = await request.json();
     const { name, description, price, categoryId, images, stock } = body;
-
+    // Actualizar el producto en la base de datos
     const product = await prisma.product.update({
       where: { id: params.id },
       data: {
@@ -69,7 +73,7 @@ export async function PUT(
         category: true,
       },
     });
-
+    // Devolver el producto actualizado
     return NextResponse.json(product);
   } catch (error) {
     console.error("Error updating product:", error);
@@ -84,20 +88,22 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  // Eliminar el producto por ID
   try {
+    // Verificar la sesión del usuario
     const session = await getServerSession(authOptions);
-
+    // Solo los administradores pueden eliminar productos
     if (!session || (session?.user as any)?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
       );
     }
-
+    // Eliminar el producto de la base de datos
     await prisma.product.delete({
       where: { id: params.id },
     });
-
+    // Devolver una respuesta de éxito
     return NextResponse.json({ message: "Producto eliminado" });
   } catch (error) {
     console.error("Error deleting product:", error);

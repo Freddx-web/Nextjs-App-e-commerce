@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 
+// Define the structure of a cart item
 interface CartItem {
   id: string;
   quantity: number;
@@ -19,30 +20,32 @@ interface CartItem {
 }
 
 export default function CheckoutPage() {
+  // State and hooks
   const { data: session, status } = useSession() || {};
   const router = useRouter();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  
+  // Shipping information state
   const [shippingName, setShippingName] = useState('');
   const [shippingEmail, setShippingEmail] = useState('');
   const [shippingAddress, setShippingAddress] = useState('');
-
+  // Redirect unauthenticated users and fetch cart on authentication
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
       return;
     }
+    // Fetch cart items when authenticated
     if (status === 'authenticated') {
       fetchCart();
       setShippingEmail(session?.user?.email || '');
       setShippingName(session?.user?.name || '');
     }
   }, [status, router, session]);
-
+  // Function to fetch cart items
   const fetchCart = async () => {
-    try {
+    try { 
       const res = await fetch('/api/cart');
       if (res.ok) {
         const data = await res.json();
@@ -59,12 +62,13 @@ export default function CheckoutPage() {
       setLoading(false);
     }
   };
-
+  // Handle form submission to create checkout session
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-
+    // Prepare items for the checkout session
     try {
+      // Map cart items to the format expected by the backend
       const items = cartItems?.map?.(item => ({
         name: item?.product?.name ?? 'Producto',
         description: (item?.product as any)?.description ?? '',
@@ -72,7 +76,7 @@ export default function CheckoutPage() {
         quantity: item?.quantity ?? 1,
         images: (item?.product as any)?.images ?? [],
       })) ?? [];
-
+      // Call the API to create a checkout session
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -83,7 +87,7 @@ export default function CheckoutPage() {
           shippingAddress,
         }),
       });
-
+      // Handle the response
       if (res.ok) {
         const { url } = await res.json();
         if (url) {
@@ -102,12 +106,12 @@ export default function CheckoutPage() {
       setSubmitting(false);
     }
   };
-
+  // Calculate total amount
   const total = cartItems?.reduce?.(
     (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
     0
   ) ?? 0;
-
+  // Render loading state
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

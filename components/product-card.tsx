@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-
+// ProductCard component to display product details and add to cart functionality
 interface ProductCardProps {
   product: {
     id: string;
@@ -22,20 +22,21 @@ interface ProductCardProps {
   };
   index?: number;
 }
-
+// ProductCard component definition
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
+  // Get user session and router instance
   const { data: session } = useSession() || {};
   const router = useRouter();
-
+  // Function to handle adding product to cart
   const addToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
+    // Redirect to login if user is not authenticated
     if (!session) {
       router.push('/login');
       return;
     }
-
+    // Make API call to add product to cart
     try {
       const res = await fetch('/api/cart', {
         method: 'POST',
@@ -57,7 +58,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       toast.error('Error al agregar al carrito');
     }
   };
-
+  // Render the product card
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

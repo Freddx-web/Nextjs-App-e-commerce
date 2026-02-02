@@ -9,6 +9,7 @@ import { Trash2, ShoppingBag } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 
+// Types
 interface CartItem {
   id: string;
   quantity: number;
@@ -22,13 +23,13 @@ interface CartItem {
     };
   };
 }
-
+// Main Component
 export default function CartPage() {
   const { data: session, status } = useSession() || {};
   const router = useRouter();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
-
+  // Redirect unauthenticated users and fetch cart for authenticated users
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
@@ -38,7 +39,7 @@ export default function CartPage() {
       fetchCart();
     }
   }, [status, router]);
-
+  // Fetch cart items from API
   const fetchCart = async () => {
     try {
       const res = await fetch('/api/cart');
@@ -53,17 +54,17 @@ export default function CartPage() {
       setLoading(false);
     }
   };
-
+  // Update item quantity
   const updateQuantity = async (cartItemId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
-
+    // Optimistic UI update
     try {
       const res = await fetch('/api/cart', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cartItemId, quantity: newQuantity }),
       });
-
+      // Refresh cart on success
       if (res.ok) {
         fetchCart();
       } else {
@@ -74,13 +75,14 @@ export default function CartPage() {
       toast.error('Error al actualizar cantidad');
     }
   };
-
+  // Remove item from cart
   const removeItem = async (cartItemId: string) => {
     try {
+      // Optimistic UI update
       const res = await fetch(`/api/cart?cartItemId=${cartItemId}`, {
         method: 'DELETE',
       });
-
+      // Refresh cart on success
       if (res.ok) {
         toast.success('Producto eliminado');
         fetchCart();
@@ -92,12 +94,12 @@ export default function CartPage() {
       toast.error('Error al eliminar producto');
     }
   };
-
+  // Calculate total price
   const total = cartItems?.reduce?.(
     (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
     0
   ) ?? 0;
-
+  // Render loading state
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { User, Mail, Phone, MapPin, Calendar } from 'lucide-react';
-
+// Definición de la interfaz del perfil de usuario
 interface UserProfile {
   id: string;
   name: string;
@@ -20,7 +20,7 @@ interface UserProfile {
   createdAt: string;
   image?: string;
 }
-
+// Extender la interfaz User para incluir el id y role
 interface ExtendedUser {
   id?: string;
   name?: string | null;
@@ -39,7 +39,7 @@ export default function ProfilePage() {
     phone: '',
     address: '',
   });
-
+  // Cargar los datos del perfil cuando la sesión esté disponible
   useEffect(() => {
     if (session?.user) {
       const user = session.user as ExtendedUser;
@@ -55,7 +55,17 @@ export default function ProfilePage() {
       }));
     }
   }, [session]);
-
+  // Actualizar los datos del formulario cuando el perfil cambie
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        name: profile.name || '',
+        phone: profile.phone || '',
+        address: profile.address || '',
+      });
+    }
+  }, [profile]);
+  // Manejar cambios en los campos del formulario
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -63,7 +73,7 @@ export default function ProfilePage() {
       [name]: value
     }));
   };
-
+  // Manejar el envío del formulario de edición
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -108,7 +118,7 @@ export default function ProfilePage() {
       setIsLoading(false);
     }
   };
-
+  // Manejar la cancelación de la edición
   const handleCancel = () => {
     // Restaurar los datos actuales del perfil al formulario
     setFormData({
@@ -118,7 +128,7 @@ export default function ProfilePage() {
     });
     setIsEditing(false);
   };
-
+  // Mostrar un indicador de carga si el perfil no está disponible
   if (!profile) {
     return (
       <div className="flex items-center justify-center min-h-screen">

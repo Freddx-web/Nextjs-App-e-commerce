@@ -17,7 +17,7 @@ import {
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-
+// Define the menu items for the sidebar
 const menuItems = [
   {
     title: 'Dashboard',
@@ -50,12 +50,13 @@ const menuItems = [
     icon: ShoppingCart,
   },
 ];
-
+// AdminSidebar component
 export function AdminSidebar() {
+  // Get the current pathname
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  // Render the sidebar
   return (
     <>
       {/* Mobile Menu Button */}
