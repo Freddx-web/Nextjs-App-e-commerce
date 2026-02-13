@@ -1,4 +1,6 @@
 {
 	"folders": [],
-	"settings": {}
+	"settings": {
+		"prisma.pinToPrisma6": true
+	}
 }
