@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Shield, User as UserIcon, Plus } from 'lucide-react';
+import { ArrowLeft, Shield, User as UserIcon, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 // Interfaces para los usuarios
@@ -77,6 +77,25 @@ export default function AdminUsersPage() {
     } catch (error) {
       console.error('Error:', error);
       toast.error('Error al actualizar rol');
+    }
+  };
+
+  // Función para eliminar un usuario
+  const deleteUser = async (userId: string) => {
+    if (!confirm('¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.')) return;
+    try {
+      const res = await fetch(`/api/users/${userId}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        toast.success('Usuario eliminado');
+        fetchUsers();
+      } else {
+        toast.error('Error al eliminar usuario');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Error al eliminar usuario');
     }
   };
 
@@ -179,13 +198,22 @@ export default function AdminUsersPage() {
                       {new Date(user.createdAt).toLocaleDateString('es-ES')}
                     </td>
                     <td className="px-6 py-4">
-                      <Button
-                        onClick={() => toggleRole(user.id, user.role)}
-                        size="sm"
-                        variant="outline"
-                      >
-                        Cambiar a {user.role === 'ADMIN' ? 'Cliente' : 'Admin'}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => toggleRole(user.id, user.role)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          Cambiar a {user.role === 'ADMIN' ? 'Cliente' : 'Admin'}
+                        </Button>
+                        <Button
+                          onClick={() => deleteUser(user.id)}
+                          size="sm"
+                          variant="destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </td>
                   </motion.tr>
                 )) || null}

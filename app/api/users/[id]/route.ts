@@ -55,3 +55,33 @@ export async function PUT(
     );
   }
 }
+
+// Eliminar Usuario del Administrador
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    // Obtener la sesión del usuario
+    const session = await getServerSession(authOptions);
+    // Verificar si el usuario es administrador
+    if (!session || (session?.user as any)?.role !== "ADMIN") {
+      return NextResponse.json(
+        { error: "No autorizado" },
+        { status: 401 }
+      );
+    }
+    // Eliminar el usuario de la base de datos
+    await prisma.user.delete({
+      where: { id: params.id },
+    });
+    // Retornar la respuesta de éxito
+    return NextResponse.json({ message: "Usuario eliminado" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return NextResponse.json(
+      { error: "Error al eliminar usuario" },
+      { status: 500 }
+    );
+  }
+}
