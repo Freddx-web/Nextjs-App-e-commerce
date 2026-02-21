@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Shield, User as UserIcon, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Shield, User as UserIcon, Plus, Trash2, Edit } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 // Interfaces para los usuarios
@@ -199,6 +199,13 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
+                        <Button
+                          onClick={() => router.push(`/admin/users/${user.id}`)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
                         <Button
                           onClick={() => toggleRole(user.id, user.role)}
                           size="sm"
