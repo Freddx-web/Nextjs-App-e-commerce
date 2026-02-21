@@ -69,7 +69,7 @@ export default function AdminOrdersPage() {
   const handleUpdateStatus = async () => {
     if (!selectedOrder) return;
 
-    try {
+    try {// Llamada a la API para actualizar el estado de la orden
       const res = await fetch(`/api/orders/${selectedOrder.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -105,14 +105,14 @@ export default function AdminOrdersPage() {
       DELIVERED: 'Entregado',
       CANCELLED: 'Cancelado',
     };
-
+    // Retornar el badge con el estilo y la etiqueta correspondiente
     return (
       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${styles[status] || ''}`}>
         {labels[status] || status}
       </span>
     );
   };
-
+  // Renderizado condicional basado en el estado de carga
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
