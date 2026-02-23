@@ -147,6 +147,35 @@ async function main() {
         description: 'Herramientas y complementos más avanzados que tenemos',
       },
     });
+
+
+    // Now create sample addresses for the admin user
+console.log('Creating sample addresses...');
+await prisma.address.createMany({
+  data: [
+    {
+      userId: adminUser.id,
+      name: 'Home Address',
+      street: '123 Main St',
+      city: 'Anytown',
+      postalCode: '12345',
+      country: 'USA',
+      phone: '+1234567890',
+      isDefault: true,
+    },
+    {
+      userId: adminUser.id,
+      name: 'Work Address',
+      street: '456 Office Blvd',
+      city: 'Business City',
+      postalCode: '67890',
+      country: 'USA',
+      phone: '+0987654321',
+      isDefault: false,
+    },
+  ],
+  skipDuplicates: true, // Avoid errors if addresses already exist
+});
     
     const pedal_effect = await prisma.category.upsert({
       where: { slug: 'pedal_effect' },
