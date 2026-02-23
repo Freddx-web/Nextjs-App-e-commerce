@@ -9,14 +9,18 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
-
+// Interfaces para los usuarios
 interface User {
   id: string;
   name: string | null;
   email: string | null;
   role: string;
+    createdAt: string;
+    _count?: {
+        orders: number;
+    };
 }
-
+// Página de edición de usuario para administradores
 export default function EditUserPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -24,12 +28,12 @@ export default function EditUserPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
+  // Efecto para verificar la sesión y el rol del usuario
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
       return;
-    }
+    } // Verificar si el usuario es administrador
     if (status === 'authenticated') {
       const userRole = (session?.user as any)?.role;
       if (userRole !== 'ADMIN') {
@@ -39,9 +43,9 @@ export default function EditUserPage() {
       fetchUser();
     }
   }, [status, session, id]);
-
+  // Función para obtener el usuario desde la API
   const fetchUser = async () => {
-    try {
+    try { // Llamada a la API para obtener el usuario
       const res = await fetch(`/api/users/${id}`);
       if (res.ok) {
         const data = await res.json();
@@ -57,12 +61,12 @@ export default function EditUserPage() {
       setLoading(false);
     }
   };
-
+  // Función para actualizar el usuario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
     setSaving(true);
-    try {
+    try {// Llamada a la API para actualizar el usuario
       const res = await fetch(`/api/users/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -85,7 +89,7 @@ export default function EditUserPage() {
       setSaving(false);
     }
   };
-
+  // Renderizado condicional basado en el estado de carga y la existencia del usuario
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -93,7 +97,7 @@ export default function EditUserPage() {
       </div>
     );
   }
-
+  // Si el usuario no existe, mostrar mensaje de error
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
