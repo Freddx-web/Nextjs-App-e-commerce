@@ -8,10 +8,17 @@ node_modules
 .build
 .note.txt
 
+# Scripts
+/scripts/scripts.sql
+
 # OS
 .DS_Store
 prisma/seed.ts
 prisma/seed-prod.ts
+
+# .Cursor
+.cursor
+
 # Tests
 /coverage
 /.nyc_output

@@ -19,6 +19,18 @@ interface CartItem {
   };
 }
 
+// Define the structure of a saved address
+interface SavedAddress {
+  id: string;
+  name: string;
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  phone?: string;
+  isDefault: boolean;
+}
+
 export default function CheckoutPage() {
   // State and hooks
   const { data: session, status } = useSession() || {};
@@ -30,19 +42,25 @@ export default function CheckoutPage() {
   const [shippingName, setShippingName] = useState('');
   const [shippingEmail, setShippingEmail] = useState('');
   const [shippingAddress, setShippingAddress] = useState('');
-  // Redirect unauthenticated users and fetch cart on authentication
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>('');
+  const [isCustomAddress, setIsCustomAddress] = useState(false);
+
+  // Redirect unauthenticated users and fetch cart and addresses on authentication
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
       return;
     }
-    // Fetch cart items when authenticated
+    // Fetch cart items and saved addresses when authenticated
     if (status === 'authenticated') {
       fetchCart();
+      fetchSavedAddresses();
       setShippingEmail(session?.user?.email || '');
       setShippingName(session?.user?.name || '');
     }
   }, [status, router, session]);
+
   // Function to fetch cart items
   const fetchCart = async () => {
     try { 
@@ -62,6 +80,46 @@ export default function CheckoutPage() {
       setLoading(false);
     }
   };
+
+  // Function to format address
+  const formatAddress = (addr: SavedAddress) => {
+    return `${addr.street}, ${addr.city}, ${addr.postalCode}, ${addr.country}`;
+  };
+
+  // Function to fetch saved addresses
+  const fetchSavedAddresses = async () => {
+    try {
+      const res = await fetch('/api/profile/addresses'); // Corrected endpoint
+      if (res.ok) {
+        const data = await res.json();
+        setSavedAddresses(data || []);
+        // Pre-set with default address
+        const defaultAddr = data.find((addr: SavedAddress) => addr.isDefault);
+        if (defaultAddr) {
+          setSelectedAddressId(defaultAddr.id);
+          setShippingAddress(formatAddress(defaultAddr));
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching saved addresses:', error);
+      toast.error('Error al cargar direcciones guardadas');
+    }
+  };
+
+  // Handle address selection
+  const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = e.target.value;
+    setSelectedAddressId(selectedId);
+    if (selectedId === 'custom') {
+      setIsCustomAddress(true);
+      setShippingAddress('');
+    } else {
+      setIsCustomAddress(false);
+      const selectedAddr = savedAddresses.find(addr => addr.id === selectedId);
+      setShippingAddress(selectedAddr ? formatAddress(selectedAddr) : '');
+    }
+  };
+
   // Handle form submission to create checkout session
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,11 +164,13 @@ export default function CheckoutPage() {
       setSubmitting(false);
     }
   };
+
   // Calculate total amount
   const total = cartItems?.reduce?.(
     (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
     0
   ) ?? 0;
+
   // Render loading state
   if (status === 'loading' || loading) {
     return (
@@ -172,14 +232,34 @@ export default function CheckoutPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Dirección de Envío
                 </label>
-                <textarea
-                  value={shippingAddress}
-                  onChange={(e) => setShippingAddress(e.target.value)}
-                  required
-                  rows={3}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#60B5FF]"
-                  placeholder="Calle, ciudad, código postal, país"
-                />
+                {savedAddresses.length > 0 && (
+                  <select
+                    value={selectedAddressId}
+                    onChange={handleAddressChange}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#60B5FF] focus:border-transparent mb-4"
+                  >
+                    <option value="">Seleccionar dirección guardada</option>
+                    {savedAddresses.map((addr) => (
+                      <option key={addr.id} value={addr.id}>
+                        {addr.name} - {formatAddress(addr)}
+                      </option>
+                    ))}
+                    <option value="custom">Dirección personalizada</option>
+                  </select>
+                )}
+                {isCustomAddress || savedAddresses.length === 0 ? (
+                  <Input
+                    type="text"
+                    value={shippingAddress}
+                    onChange={(e) => setShippingAddress(e.target.value)}
+                    required
+                    placeholder="Tu dirección completa"
+                  />
+                ) : (
+                  <div className="p-3 border border-gray-300 rounded-md bg-gray-50">
+                    {shippingAddress}
+                  </div>
+                )}
               </div>
             </div>
           </div>

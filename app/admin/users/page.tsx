@@ -18,7 +18,7 @@ interface User {
     orders: number;
   };
 }
-
+// Página de administración de usuarios
 export default function AdminUsersPage() {
   const { data: session, status } = useSession() || {};
   const router = useRouter();

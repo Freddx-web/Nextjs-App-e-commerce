@@ -30,9 +30,13 @@ export async function GET() {
       return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
     }
 
-    // For demo purposes, return mock data
-    // In a real app, you would query from the database
-    return NextResponse.json([]);
+    // Obtener las direcciones del usuario desde la base de datos
+    const userAddresses = await prisma.address.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return NextResponse.json(userAddresses);
   } catch (error) {
     console.error('Error fetching addresses:', error);
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
@@ -60,18 +64,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
     }
     // Parsear el cuerpo de la solicitud para obtener los datos de la dirección
-    const addressData = await request.json();
+    const { name, street, city, postalCode, country, phone, isDefault } = await request.json();
     
-    // For demo purposes, just return the data
-    // In a real app, you would save to the database
-    const newAddress = {
-      id: Math.random().toString(36).substr(2, 9),
-      userId: user.id,
-      ...addressData,
-      createdAt: new Date().toISOString(),
-    };
-    // Agregar la nueva dirección al almacenamiento simulado
-    addresses.push(newAddress);
+    // Validar datos requeridos
+    if (!name || !street || !city || !postalCode || !country) {
+      return NextResponse.json({ error: 'Datos incompletos' }, { status: 400 });
+    }
+
+    // Si se marca como default, quitar el default de otras direcciones
+    if (isDefault) {
+      await prisma.address.updateMany({
+        where: { userId: user.id, isDefault: true },
+        data: { isDefault: false },
+      });
+    }
+
+    // Crear la nueva dirección
+    const newAddress = await prisma.address.create({
+      data: {
+        userId: user.id,
+        name,
+        street,
+        city,
+        postalCode,
+        country,
+        phone,
+        isDefault: isDefault || false,
+      },
+    });
+
     return NextResponse.json(newAddress);
   } catch (error) {
     console.error('Error creating address:', error);
