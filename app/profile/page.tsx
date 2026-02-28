@@ -16,9 +16,21 @@ interface UserProfile {
   name: string;
   email: string;
   phone?: string;
-  address?: string;
+  address?: string; // esta propiedad almacena la dirección formateada
   createdAt: string;
   image?: string;
+}
+
+// Reutilizamos la misma definición de dirección que en la sección de direcciones
+interface Address {
+  id: string;
+  name: string;
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  phone?: string;
+  isDefault: boolean;
 }
 // Extender la interfaz User para incluir el id y role
 interface ExtendedUser {
@@ -39,6 +51,54 @@ export default function ProfilePage() {
     phone: '',
     address: '',
   });
+
+  // Direcciones guardadas del usuario (se cargan desde /api/profile/addresses)
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>('');
+
+  // Helper para formatear una dirección completa a texto legible
+  const formatAddress = (addr: Address) => {
+    return `${addr.street}, ${addr.city}, ${addr.postalCode}, ${addr.country}`;
+  };
+
+  // Cargar direcciones del usuario
+  useEffect(() => {
+    const loadAddresses = async () => {
+      try {
+        const res = await fetch('/api/profile/addresses');
+        if (res.ok) {
+          const data = await res.json();
+          setAddresses(data);
+
+          // si ya tenemos una dirección en el perfil, intentar seleccionar la coincidente
+          if (profile?.address) {
+            const match = data.find((a: Address) => formatAddress(a) === profile.address);
+            if (match) {
+              setSelectedAddressId(match.id);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error loading addresses:', err);
+      }
+    };
+
+    loadAddresses();
+  }, [profile]);
+
+  // Maneja la selección de una dirección guardada
+  const handleAddressSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = e.target.value;
+    setSelectedAddressId(id);
+    if (id === '') {
+      setFormData(prev => ({ ...prev, address: '' }));
+      return;
+    }
+    const addr = addresses.find(a => a.id === id);
+    if (addr) {
+      setFormData(prev => ({ ...prev, address: formatAddress(addr) }));
+    }
+  };
   // Cargar los datos del perfil cuando la sesión esté disponible
   useEffect(() => {
     if (session?.user) {
@@ -63,8 +123,18 @@ export default function ProfilePage() {
         phone: profile.phone || '',
         address: profile.address || '',
       });
+
+      // sincronizar selección de dirección si la dirección coincide con alguna guardada
+      if (profile.address && addresses.length > 0) {
+        const match = addresses.find(a => formatAddress(a) === profile.address);
+        if (match) {
+          setSelectedAddressId(match.id);
+        } else {
+          setSelectedAddressId('');
+        }
+      }
     }
-  }, [profile]);
+  }, [profile, addresses]);
   // Manejar cambios en los campos del formulario
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -99,6 +169,16 @@ export default function ProfilePage() {
         address: updatedProfile.address || '',
       });
 
+      // actualizar selección si coincide con alguna dirección guardada
+      if (updatedProfile.address) {
+        const match = addresses.find(a => formatAddress(a) === updatedProfile.address);
+        if (match) {
+          setSelectedAddressId(match.id);
+        } else {
+          setSelectedAddressId('');
+        }
+      }
+
       // Update session (solo nombre e imagen, el resto no está en session por defecto)
       await update({
         ...session,
@@ -126,6 +206,8 @@ export default function ProfilePage() {
       phone: profile?.phone || '',
       address: profile?.address || '',
     });
+    // sin selección cuando se cancela
+    setSelectedAddressId('');
     setIsEditing(false);
   };
   // Mostrar un indicador de carga si el perfil no está disponible
@@ -244,13 +326,27 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="address">Dirección</Label>
-                <Input
+                <select
                   id="address"
                   name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  placeholder="Calle, número, ciudad, código postal"
-                />
+                  value={selectedAddressId}
+                  onChange={handleAddressSelect}
+                  className="block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                >
+                  <option value="">-- Selecciona una dirección --</option>
+                  {addresses.map(addr => (
+                    <option key={addr.id} value={addr.id}>
+                      {formatAddress(addr)}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-sm text-gray-500">
+                  <a href="/profile/addresses" className="text-blue-600 underline">
+                    Gestionar mis direcciones
+                  </a>
+                </p>
+                {/* hidden input used by handleSubmit in case no selection was chosen */}
+                <input type="hidden" name="address" value={formData.address} />
               </div>
               <Separator />
               <div className="flex justify-end gap-3">
