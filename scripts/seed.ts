@@ -9,32 +9,52 @@ const productImages = {
    * MoskyAudio Products
    */
   // Imagenes del Bright Flame Amp
-  moskyAudio_bright_flame_amp_photo_0: "https://www.moskyaudio.com/Uploads/674fb86d9ce33.jpg",
-  moskyAudio_bright_flame_amp_photo_1: "https://www.moskyaudio.com/Uploads/674fb86d9aa93.jpg",
-  moskyAudio_bright_flame_amp_photo_2: "https://www.moskyaudio.com/Uploads/674fb86d9b28a.jpg",
+  moskyAudio_bright_flame_amp_photo_0: "https://i.ibb.co/XZ1JKYfm/674fb86d9d8f5.jpg",
+  moskyAudio_bright_flame_amp_photo_1: "https://i.ibb.co/4ZGqCZhb/674fb86d9b28a.jpg",
+  moskyAudio_bright_flame_amp_photo_2: "https://i.ibb.co/8gkfXDt2/674fb86d9aa93.jpg", 
+  moskyAudio_bright_flame_amp_photo_3: "https://i.ibb.co/qXDwZBw/674fb86d97495.jpg",
+
   // Imagenes del G III blue purple
-  moskyAudio_g_iii_blue_purple_photo_0: "https://www.moskyaudio.com/Uploads/667d0e69a626e.jpg",
+  moskyAudio_g_iii_blue_purple_photo_0: "https://i.ibb.co/B2x84PRc/667d0e69a626e.jpg",
   // Imagenes del overdrive dolphin
-  moskyAudio_overdrive_dolphin_photo_0: "https://www.moskyaudio.com/Uploads/64632ad9ead27.jpg",
-  moskyAudio_overdrive_dolphin_photo_1: "https://www.moskyaudio.com/Uploads/64632ad9eb964.jpg",
-  moskyAudio_overdrive_dolphin_photo_2: "https://www.moskyaudio.com/Uploads/64632ad9ec137.jpg",
+  moskyAudio_overdrive_dolphin_photo_0: "https://i.ibb.co/KxdDJMGw/64632ad9ec563.jpg",
+  moskyAudio_overdrive_dolphin_photo_1: "https://i.ibb.co/60fvZzf6/64632ad9eb555.jpg",
+  moskyAudio_overdrive_dolphin_photo_2: "https://i.ibb.co/XfDtnBv7/64632ad9eb964.jpg",
+  moskyAudio_overdrive_dolphin_photo_3: "https://i.ibb.co/kgXKzKvB/64632ad9ead27.jpg",
   /// Imagenes del lm741 preamp
-  moskyAudio_lm741_preamp: "https://www.moskyaudio.com/Uploads/64632fa74e960.jpg",
+  moskyAudio_lm741_preamp_0: "https://i.ibb.co/TDhQ6VhS/64632fa74e960.jpg",
+  moskyAudio_lm741_preamp_1: "https://i.ibb.co/wr3THDSf/646d744603bc2.jpg",
+  moskyAudio_lm741_preamp_2: "https://i.ibb.co/3m3NffCC/646d7446044aa.jpg",
+  moskyAudio_lm741_preamp_3: "https://i.ibb.co/WJ25xD0/646d744604dc2.jpg",
   // Imagenes del cosmic blue
-  moskyAudio_cosmic_blue: "https://www.moskyaudio.com/Uploads/64632f712b227.jpg",
+  moskyAudio_cosmic_blue: "https://i.ibb.co/m5bKVvVK/64632f712b227.jpg",
   // Imagenes del iso10 power supply
-  moskyAudio_iso10_power_supply: "https://www.moskyaudio.com/Uploads/60da957db5fd0.jpg",
+  moskyAudio_iso10_power_supply_0: "https://i.ibb.co/JWndDC9j/60da957db51c0.jpg",
+  moskyAudio_iso10_power_supply_1: "https://i.ibb.co/mVF967tY/60da957db5a53.jpg",
+  moskyAudio_iso10_power_supply_2: "https://i.ibb.co/cSzbTJq0/60da957db56c3.jpg",
+
   // Imagenes del sky reverb delay
-  moskyAudio_sky_reverb_delay: "https://www.moskyaudio.com/Uploads/5fe45bc5363dd.jpg",
+  moskyAudio_sky_reverb_delay_0: "https://i.ibb.co/0RGvg21Z/5fe45bc5363dd.jpg",
+  moskyAudio_sky_reverb_delay_1: "https://i.ibb.co/hFf5wVj1/5fe45bc536993.jpg",
+  moskyAudio_sky_reverb_delay_2: "https://i.ibb.co/jkqsnBYB/5fe45bc53747f.jpg",
+
   // Imagenes del sol918 multi effects
-  moskyAudio_sol918_multi_effects_photo_0: "https://www.moskyaudio.com/Uploads/60da9377a8597.jpg",
-  moskyAudio_sol918_multi_effects_photo_1: "https://www.moskyaudio.com/Uploads/60da9377a7d6c.jpg",
+  moskyAudio_sol918_multi_effects_photo_0: "https://i.ibb.co/s9PBjFv2/60da9377a8597.jpg",
+  moskyAudio_sol918_multi_effects_photo_1: "https://i.ibb.co/GQ9yyTnD/60da9377a7d6c.jpg",
+  moskyAudio_sol918_multi_effects_photo_2: "https://i.ibb.co/hxBFwvFh/60da9377a766c.jpg",
   // Imagenes del blue ocean chorus
-  moskyAudio_blue_ocean_chorus: "https://www.moskyaudio.com/Uploads/60da8feaaaca0.jpg",
+  moskyAudio_blue_ocean_chorus_0: "https://i.ibb.co/QFYmn9Xf/60da8feaaaca0.jpg",
+  moskyAudio_blue_ocean_chorus_1: "https://i.ibb.co/3Yrsgy5H/60da8feaab6fb.jpg",
+  moskyAudio_blue_ocean_chorus_2: "https://i.ibb.co/HfTJKJ9W/60da8feaabf45.jpg",
+
   // Imagenes del mad cow
-  moskyAudio_mad_cow: "https://www.moskyaudio.com/Uploads/65f402af36bdd.jpg",
+  moskyAudio_mad_cow_0: "https://i.ibb.co/0ypv03vF/65f402af36bdd.jpg",
+  moskyAudio_mad_cow_1: "https://i.ibb.co/JWtWCqL7/65faa0e789bb6.jpg",
+  moskyAudio_mad_cow_2: "https://i.ibb.co/Q75Nt253/65faa0e7962c5.jpg",
+  moskyAudio_mad_cow_3: "https://i.ibb.co/C5HPhKNj/65faa0e796d59.jpg",
+
   // Imagenes del effect pedal cable
-  moskyAudio_effect_pedal_cable: "https://www.moskyaudio.com/Uploads/581c4ce5297da.png",
+  moskyAudio_effect_pedal_cable: "https://i.ibb.co/kgVHnnhr/581c4ce5297da.png",
   
   /**
    * M-VAVE Products
@@ -203,6 +223,7 @@ await prisma.address.createMany({
         productImages.moskyAudio_bright_flame_amp_photo_0,
         productImages.moskyAudio_bright_flame_amp_photo_1,
         productImages.moskyAudio_bright_flame_amp_photo_2,
+        productImages.moskyAudio_bright_flame_amp_photo_3,
       ]
     );
 
@@ -237,7 +258,12 @@ await prisma.address.createMany({
       30.00,
       20,
       pedal_effect.id,
-      [productImages.moskyAudio_lm741_preamp]
+      [
+        productImages.moskyAudio_lm741_preamp_0, 
+        productImages.moskyAudio_lm741_preamp_1,
+        productImages.moskyAudio_lm741_preamp_2,
+        productImages.moskyAudio_lm741_preamp_3
+      ]
     );
 
     await createProduct(
@@ -257,7 +283,11 @@ await prisma.address.createMany({
       50.00,
       10,
       pedal_effect.id,
-      [productImages.moskyAudio_sky_reverb_delay]
+      [
+        productImages.moskyAudio_sky_reverb_delay_0, 
+        productImages.moskyAudio_sky_reverb_delay_1,
+        productImages.moskyAudio_sky_reverb_delay_2
+      ]
     );
 
     await createProduct(
@@ -270,6 +300,7 @@ await prisma.address.createMany({
       [
         productImages.moskyAudio_sol918_multi_effects_photo_0,
         productImages.moskyAudio_sol918_multi_effects_photo_1,
+        productImages.moskyAudio_sol918_multi_effects_photo_2,
       ]
     );
 
@@ -280,7 +311,11 @@ await prisma.address.createMany({
       38.00,
       15,
       pedal_effect.id,
-      [productImages.moskyAudio_blue_ocean_chorus]
+      [
+        productImages.moskyAudio_blue_ocean_chorus_0,
+        productImages.moskyAudio_blue_ocean_chorus_1,
+        productImages.moskyAudio_blue_ocean_chorus_2
+      ]
     );
 
     await createProduct(
@@ -290,7 +325,12 @@ await prisma.address.createMany({
       42.00,
       12,
       pedal_effect.id,
-      [productImages.moskyAudio_mad_cow]
+      [
+        productImages.moskyAudio_mad_cow_0,
+        productImages.moskyAudio_mad_cow_1,
+        productImages.moskyAudio_mad_cow_2,
+        productImages.moskyAudio_mad_cow_3,
+      ]
     );
 
     // MoskyAudio Products - Accessories
@@ -301,7 +341,11 @@ await prisma.address.createMany({
       55.00,
       8,
       electronica.id,
-      [productImages.moskyAudio_iso10_power_supply]
+      [
+        productImages.moskyAudio_iso10_power_supply_0, 
+        productImages.moskyAudio_iso10_power_supply_1, 
+        productImages.moskyAudio_iso10_power_supply_2
+      ]
     );
 
     await createProduct(
