@@ -41,6 +41,7 @@ export default function CheckoutPage() {
   // Shipping information state
   const [shippingName, setShippingName] = useState('');
   const [shippingEmail, setShippingEmail] = useState('');
+  const [shippingPhone, setShippingPhone] = useState('');
   const [shippingAddress, setShippingAddress] = useState('');
   const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
@@ -56,6 +57,7 @@ export default function CheckoutPage() {
     if (status === 'authenticated') {
       fetchCart();
       fetchSavedAddresses();
+      fetchUserProfile();
       setShippingEmail(session?.user?.email || '');
       setShippingName(session?.user?.name || '');
     }
@@ -78,6 +80,19 @@ export default function CheckoutPage() {
       toast.error('Error al cargar el carrito');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Function to fetch user profile
+  const fetchUserProfile = async () => {
+    try {
+      const res = await fetch('/api/profile');
+      if (res.ok) {
+        const data = await res.json();
+        setShippingPhone(data.phone || '');
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
     }
   };
 
@@ -120,46 +135,33 @@ export default function CheckoutPage() {
     }
   };
 
-  // Handle form submission to create checkout session
+  // Handle form submission to redirect to payment selection
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    // Prepare items for the checkout session
+    
     try {
-      // Map cart items to the format expected by the backend
-      const items = cartItems?.map?.(item => ({
-        name: item?.product?.name ?? 'Producto',
-        description: (item?.product as any)?.description ?? '',
-        price: item?.product?.price ?? 0,
-        quantity: item?.quantity ?? 1,
-        images: (item?.product as any)?.images ?? [],
-      })) ?? [];
-      // Call the API to create a checkout session
-      const res = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items,
-          shippingName,
-          shippingEmail,
-          shippingAddress,
-        }),
-      });
-      // Handle the response
-      if (res.ok) {
-        const { url } = await res.json();
-        if (url) {
-          window.location.href = url;
-        } else {
-          toast.error('Error al crear sesión de pago');
-        }
-      } else {
-        const error = await res.json();
-        toast.error(error.error || 'Error al crear sesión de pago');
-      }
+      // Store checkout data in sessionStorage for payment page
+      sessionStorage.setItem('checkoutData', JSON.stringify({
+        items: cartItems?.map?.(item => ({
+          name: item?.product?.name ?? 'Producto',
+          description: (item?.product as any)?.description ?? '',
+          price: item?.product?.price ?? 0,
+          quantity: item?.quantity ?? 1,
+          images: (item?.product as any)?.images ?? [],
+        })) ?? [],
+        shippingName,
+        shippingEmail,
+        shippingPhone,
+        shippingAddress,
+        total
+      }));
+      
+      // Redirect to payment selection page
+      router.push('/payment');
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al procesar el pago');
+      toast.error('Error al procesar el checkout');
     } finally {
       setSubmitting(false);
     }
@@ -228,6 +230,19 @@ export default function CheckoutPage() {
                 />
               </div>
 
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Teléfono
+                </label>
+                <Input
+                  type="tel"
+                  value={shippingPhone}
+                  onChange={(e) => setShippingPhone(e.target.value)}
+                  placeholder="+34 600 000 000"
+                />
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Dirección de Envío
@@ -236,15 +251,15 @@ export default function CheckoutPage() {
                   <select
                     value={selectedAddressId}
                     onChange={handleAddressChange}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#60B5FF] focus:border-transparent mb-4"
+                    className="w-full p-3 border border-gray-300 rounded-md mb-4"
                   >
-                    <option value="">Seleccionar dirección guardada</option>
+                    <option value="">Selecciona una dirección</option>
                     {savedAddresses.map((addr) => (
                       <option key={addr.id} value={addr.id}>
                         {addr.name} - {formatAddress(addr)}
                       </option>
                     ))}
-                    <option value="custom">Dirección personalizada</option>
+                    <option value="custom">Usar dirección personalizada</option>
                   </select>
                 )}
                 {isCustomAddress || savedAddresses.length === 0 ? (
@@ -263,7 +278,6 @@ export default function CheckoutPage() {
               </div>
             </div>
           </div>
-
           <div className="border-t pt-6">
             <h2 className="text-2xl font-semibold mb-4">Resumen del Pedido</h2>
             <div className="space-y-2">
@@ -287,17 +301,15 @@ export default function CheckoutPage() {
               </div>
             </div>
           </div>
-
           <Button
             type="submit"
             disabled={submitting}
             className="w-full bg-[#60B5FF] hover:bg-[#4A9FE8] py-6 text-lg"
           >
-            {submitting ? 'Redirigiendo a Stripe...' : 'Proceder al Pago'}
+            {submitting ? 'Redirigiendo...' : 'Seleccionar Método de Pago'}
           </Button>
-
           <p className="text-sm text-gray-500 text-center">
-            Serás redirigido a Stripe para completar tu pago de forma segura.
+            Serás redirigido para seleccionar tu método de pago preferido.
           </p>
         </motion.form>
       </div>
