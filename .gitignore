@@ -10,6 +10,7 @@ node_modules
 
 # Scripts
 /scripts/scripts.sql
+/script/Imágenes/
 
 # OS
 .DS_Store
