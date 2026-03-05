@@ -18,9 +18,6 @@ export default function PaymentSelectionPage() {
     if (selectedMethod === 'card') {
       // Redirect to card payment processing
       router.push('/payment/card');
-    } else if (selectedMethod === 'mobile') {
-      // Redirect to mobile payment processing
-      router.push('/payment/mobile');
     }
   };
 
@@ -81,12 +78,8 @@ export default function PaymentSelectionPage() {
           <motion.div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => handlePaymentMethodSelect('mobile')}
-            className={`bg-white rounded-2xl shadow-lg p-6 cursor-pointer border-2 transition-all ${
-              selectedMethod === 'mobile' 
-                ? 'border-[#60B5FF] shadow-xl' 
-                : 'border-transparent hover:border-gray-200'
-            }`}
+            onClick={() => router.push('/payment/qr-scan')}
+            className={`bg-white rounded-2xl shadow-lg p-6 cursor-pointer border-2 transition-all hover:border-gray-200`}
           >
             <div className="flex items-center space-x-4">
               <div className="bg-green-100 p-3 rounded-full">
@@ -100,11 +93,6 @@ export default function PaymentSelectionPage() {
                   <span className="text-sm font-medium text-green-600">Banco Venezuela</span>
                 </div>
               </div>
-              {selectedMethod === 'mobile' && (
-                <div className="w-6 h-6 bg-[#60B5FF] rounded-full flex items-center justify-center">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                </div>
-              )}
             </div>
           </motion.div>
         </motion.div>
