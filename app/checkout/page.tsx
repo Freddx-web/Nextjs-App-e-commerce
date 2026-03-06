@@ -202,7 +202,6 @@ export default function CheckoutPage() {
         >
           <div>
             <h2 className="text-2xl font-semibold mb-6">Información de Envío</h2>
-            
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -216,7 +215,6 @@ export default function CheckoutPage() {
                   placeholder="Tu nombre"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email
@@ -229,8 +227,6 @@ export default function CheckoutPage() {
                   placeholder="tu@email.com"
                 />
               </div>
-
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Teléfono
@@ -242,7 +238,6 @@ export default function CheckoutPage() {
                   placeholder="+34 600 000 000"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Dirección de Envío

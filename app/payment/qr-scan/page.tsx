@@ -10,12 +10,12 @@ import Image from 'next/image';
 export default function QRScanPage() {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
-
+  // Sample payment details for demonstration
   const phoneNumber = '+58 414-123-4567';
   const bankAccount = '0134-0000-0000-0000';
   const accountHolder = 'Juan Pérez';
   const amount = 'Bs. 150,00';
-
+  // Handle copy to clipboard for payment details
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
