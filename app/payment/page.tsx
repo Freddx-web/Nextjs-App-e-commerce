@@ -9,11 +9,11 @@ import { CreditCard, Smartphone } from 'lucide-react';
 export default function PaymentSelectionPage() {
   const router = useRouter();
   const [selectedMethod, setSelectedMethod] = useState<'card' | 'mobile' | null>(null);
-
+  // Handle payment method selection
   const handlePaymentMethodSelect = (method: 'card' | 'mobile') => {
     setSelectedMethod(method);
   };
-
+  // Handle continue button click based on selected payment method
   const handleContinue = () => {
     if (selectedMethod === 'card') {
       // Redirect to card payment processing
