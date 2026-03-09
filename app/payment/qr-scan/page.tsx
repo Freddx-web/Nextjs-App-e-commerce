@@ -1,5 +1,6 @@
 'use client';
 
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -7,11 +8,19 @@ import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Smartphone, Copy, CheckCircle, Receipt } from 'lucide-react';
+=======
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Smartphone, Copy, CheckCircle } from 'lucide-react';
+>>>>>>> 64bb35adf1e0a42a234707b1c0db41b77fff9275
 import Image from 'next/image';
 
 export default function QRScanPage() {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+<<<<<<< HEAD
   const [totalAmount, setTotalAmount] = useState('0.00');
   const [transactionId, setTransactionId] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -38,12 +47,21 @@ export default function QRScanPage() {
   const amount = `Bs. ${totalAmount}`;
 
   // Handle copy to clipboard for payment details
+=======
+
+  const phoneNumber = '+58 414-123-4567';
+  const bankAccount = '0134-0000-0000-0000';
+  const accountHolder = 'Juan Pérez';
+  const amount = 'Bs. 150,00';
+
+>>>>>>> 64bb35adf1e0a42a234707b1c0db41b77fff9275
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+<<<<<<< HEAD
   // Handle payment confirmation
   const handlePaymentConfirmation = async () => {
     if (!transactionId.trim()) {
@@ -95,6 +113,8 @@ export default function QRScanPage() {
     }
   };
 
+=======
+>>>>>>> 64bb35adf1e0a42a234707b1c0db41b77fff9275
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
@@ -157,6 +177,7 @@ export default function QRScanPage() {
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
+<<<<<<< HEAD
                   <p className="text-sm text-gray-500">Banco</p>
                   <p className="font-medium text-gray-900">{bank}</p>
                 </div>
@@ -172,6 +193,8 @@ export default function QRScanPage() {
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
+=======
+>>>>>>> 64bb35adf1e0a42a234707b1c0db41b77fff9275
                   <p className="text-sm text-gray-500">Número de cuenta</p>
                   <p className="font-medium text-gray-900">{bankAccount}</p>
                 </div>
@@ -215,6 +238,7 @@ export default function QRScanPage() {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* Transaction Confirmation */}
           <div className="mt-6 border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -240,6 +264,8 @@ export default function QRScanPage() {
             </div>
           </div>
 
+=======
+>>>>>>> 64bb35adf1e0a42a234707b1c0db41b77fff9275
           {/* Instructions */}
           <div className="mt-6 bg-blue-50 rounded-xl p-4">
             <div className="flex items-start space-x-3">
@@ -253,8 +279,12 @@ export default function QRScanPage() {
                   <li>Selecciona la opción de Pago Móvil</li>
                   <li>Escanea el código QR o ingresa los datos manualmente</li>
                   <li>Confirma el pago</li>
+<<<<<<< HEAD
                   <li>Copia el número de transacción del comprobante</li>
                   <li>Pégalo en el campo superior y confirma</li>
+=======
+                  <li>Guarda el comprobante de pago</li>
+>>>>>>> 64bb35adf1e0a42a234707b1c0db41b77fff9275
                 </ol>
               </div>
             </div>
@@ -268,11 +298,18 @@ export default function QRScanPage() {
           className="mt-8 space-y-4"
         >
           <Button
+<<<<<<< HEAD
             onClick={handlePaymentConfirmation}
             disabled={!transactionId.trim() || submitting}
             className="w-full bg-[#60B5FF] hover:bg-[#4A9FE8] py-6 text-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             {submitting ? 'Procesando...' : 'Confirmar Pago'}
+=======
+            onClick={() => router.push('/payment/confirmation')}
+            className="w-full bg-[#60B5FF] hover:bg-[#4A9FE8] py-6 text-lg"
+          >
+            Ya realicé el pago
+>>>>>>> 64bb35adf1e0a42a234707b1c0db41b77fff9275
           </Button>
           
           <Button
