@@ -12,7 +12,8 @@ import {
   LogOut,
   ChevronLeft,
   Home,
-  Menu,
+  Menu, 
+  BookMarked
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
@@ -28,6 +29,11 @@ const menuItems = [
     title: 'Inicio',
     href: '/',
     icon: Home,
+  },
+  {
+    title: 'Doc API',
+    href: '/docs',
+    icon: BookMarked,
   },
   {
     title: 'Productos',

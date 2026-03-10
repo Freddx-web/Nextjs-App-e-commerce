@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
-import { ShoppingCart, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { ShoppingCart, User, LogOut, LayoutDashboard, FileText } from 'lucide-react';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
 // Header component
@@ -63,12 +63,20 @@ export function Header() {
             {status === 'authenticated' && session ? (
               <>
                 {isAdmin && (
-                  <Link href="/admin">
-                    <Button variant="ghost" size="sm" className="gap-2">
-                      <LayoutDashboard className="h-4 w-4" />
-                      Admin
-                    </Button>
-                  </Link>
+                  <>
+                    <Link href="/docs">
+                      <Button variant="ghost" size="sm" className="gap-2">
+                        <FileText className="h-4 w-4" />
+                        API Docs
+                      </Button>
+                    </Link>
+                    <Link href="/admin">
+                      <Button variant="ghost" size="sm" className="gap-2">
+                        <LayoutDashboard className="h-4 w-4" />
+                        Admin
+                      </Button>
+                    </Link>
+                  </>
                 )}
                 <Link href="/orders">
                   <Button variant="ghost" size="sm">
