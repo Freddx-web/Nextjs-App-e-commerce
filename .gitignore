@@ -8,6 +8,9 @@ node_modules
 .build
 .note.txt
 
+# workspaces 
+workspace.code-workspace
+
 # Scripts
 /scripts/scripts.sql
 /script/Imágenes/
