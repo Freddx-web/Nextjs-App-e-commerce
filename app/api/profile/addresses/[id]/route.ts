@@ -6,8 +6,9 @@ import { prisma } from '@/lib/db';
 export const dynamic = "force-dynamic";
 
 // PUT: Actualizar una dirección
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
@@ -27,14 +28,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     // Si se marca como default, quitar el default de otras direcciones
     if (isDefault) {
       await prisma.address.updateMany({
-        where: { userId: user.id, isDefault: true, id: { not: params.id } },
+        where: { userId: user.id, isDefault: true, id: { not: id } },
         data: { isDefault: false },
       });
     }
 
     // Actualizar la dirección
     const updatedAddress = await prisma.address.update({
-      where: { id: params.id, userId: user.id },
+      where: { id, userId: user.id },
       data: {
         name,
         street,
@@ -54,8 +55,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // DELETE: Eliminar una dirección
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
@@ -72,7 +74,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     // Eliminar la dirección
     await prisma.address.delete({
-      where: { id: params.id, userId: user.id },
+      where: { id, userId: user.id },
     });
 
     return NextResponse.json({ message: 'Dirección eliminada' });

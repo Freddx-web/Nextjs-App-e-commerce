@@ -18,10 +18,11 @@ export const revalidate = 10;
 // Cache the response for 10 seconds
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Obtener la sesión del usuario
   try {
+    const { id } = await params;
     // Verificar si el usuario está autenticado
     const session = await getServerSession(authOptions);
     // Si no está autenticado, devolver un error 401
@@ -36,7 +37,7 @@ export async function GET(
     const userRole = (session.user as any).role;
     // Buscar la orden por ID
     const order = await prisma.order.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         items: {
           include: {
@@ -79,10 +80,11 @@ export async function GET(
 // Endpoint para actualizar el estado de una orden
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Obtener la sesión del usuario
   try {
+    const { id } = await params;
     // Verificar si el usuario está autenticado y es ADMIN
     const session = await getServerSession(authOptions);
     // Si no está autenticado o no es ADMIN, devolver un error 401
@@ -104,7 +106,7 @@ export async function PUT(
     }
     // Actualizar el estado de la orden
     const order = await prisma.order.update({
-      where: { id: params.id },
+      where: { id },
       data: { status },
       include: {
         items: {

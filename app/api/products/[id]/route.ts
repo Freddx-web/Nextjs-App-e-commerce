@@ -11,13 +11,14 @@ export const dynamic = "force-dynamic";
 // Endpoint para obtener un producto
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Obtener el producto por ID
   try {
+    const { id } = await params;
     // Buscar el producto en la base de datos
     const product = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         category: true,
       },
@@ -42,10 +43,11 @@ export async function GET(
 // Endpoint para actualizar un producto
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Actualizar el producto por ID
   try {
+    const { id } = await params;
     // Verificar la sesión del usuario
     const session = await getServerSession(authOptions);
     // Solo los administradores pueden actualizar productos
@@ -60,7 +62,7 @@ export async function PUT(
     const { name, description, price, categoryId, images, stock } = body;
     // Actualizar el producto en la base de datos
     const product = await prisma.product.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(name && { name }),
         ...(description && { description }),
@@ -86,10 +88,11 @@ export async function PUT(
 // Endpoint para eliminar un producto
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Eliminar el producto por ID
   try {
+    const { id } = await params;
     // Verificar la sesión del usuario
     const session = await getServerSession(authOptions);
     // Solo los administradores pueden eliminar productos
@@ -101,7 +104,7 @@ export async function DELETE(
     }
     // Eliminar el producto de la base de datos
     await prisma.product.delete({
-      where: { id: params.id },
+      where: { id },
     });
     // Devolver una respuesta de éxito
     return NextResponse.json({ message: "Producto eliminado" });

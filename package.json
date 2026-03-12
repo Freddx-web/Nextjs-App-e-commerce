@@ -7,18 +7,9 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "prisma": {
-    "seed": "tsx --require dotenv/config scripts/seed.ts",
-    "migrate": "prisma migrate dev",
-    "studio": "prisma studio",
-    "generate": "prisma generate",
-    "db:seed": "tsx --require dotenv/config scripts/seed.ts",
-    "prisma-push": "npx prisma db push",
-    "prisma-seed": "db:seed",
-    "test": "npx prisma migrate reset && prisma migrate dev --name init"
-  },
   "devDependencies": {
     "@next/swc-wasm-nodejs": "13.5.1",
+    "@prisma/client": "^6.19.2",
     "@types/node": "20.6.2",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
