@@ -16,9 +16,10 @@ export const dynamic = "force-dynamic";
 // Endpoint para actualizar una categoría
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Verificar sesión y rol de usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario tiene rol de ADMIN
@@ -47,7 +48,7 @@ export async function PUT(
     }
     //
     const category = await prisma.category.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
     });
 
@@ -63,10 +64,11 @@ export async function PUT(
 // Endpoint para eliminar una categoría
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Eliminar una categoría
   try {
+    const { id } = await params;
     // Verificar sesión y rol de usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario tiene rol de ADMIN
@@ -78,7 +80,7 @@ export async function DELETE(
     }
     // Eliminar la categoría
     await prisma.category.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Categoría eliminada" });

@@ -10,9 +10,10 @@ export const dynamic = "force-dynamic";
 //  Obtener Usuario del Administrador
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario es administrador
@@ -24,7 +25,7 @@ export async function GET(
     }
     // Obtener el usuario de la base de datos
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: {
         id: true,
         name: true,
@@ -53,10 +54,11 @@ export async function GET(
 //  Actualizar Usuarios del Administrador
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Autorización y Validación
   try {
+    const { id } = await params;
     // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario es administrador
@@ -83,7 +85,7 @@ export async function PUT(
     if (role !== undefined) updateData.role = role;
     // Actualizar el usuario en la base de datos
     const user = await prisma.user.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       select: {
         id: true,
@@ -107,9 +109,10 @@ export async function PUT(
 // Eliminar Usuario del Administrador
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario es administrador
@@ -121,7 +124,7 @@ export async function DELETE(
     }
     // Eliminar el usuario de la base de datos
     await prisma.user.delete({
-      where: { id: params.id },
+      where: { id },
     });
     // Retornar la respuesta de éxito
     return NextResponse.json({ message: "Usuario eliminado" });
