@@ -6,8 +6,9 @@ import { prisma } from '@/lib/db';
 export const dynamic = "force-dynamic";
 
 // PUT: Establecer una dirección como default
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
@@ -30,7 +31,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     // Establecer la dirección específica como default
     const updatedAddress = await prisma.address.update({
-      where: { id: params.id, userId: user.id },
+      where: { id, userId: user.id },
       data: { isDefault: true },
     });
 
