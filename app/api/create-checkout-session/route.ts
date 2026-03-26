@@ -11,13 +11,14 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import Stripe from 'stripe';
-// Endpoint para crear una sesión de pago
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-12-15.clover',
-});
+
 // Endpoint para crear una sesión de pago
 export async function POST(request: Request) {
   try {
+    // Initialize Stripe client inside the function
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: '2026-02-25.clover',
+    });
     // Verificar sesión de usuario
     const session = await getServerSession(authOptions);
     // Si no hay sesión, retornar error de no autorizado

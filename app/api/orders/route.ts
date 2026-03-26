@@ -35,12 +35,12 @@ export async function GET() {
     const orders = await prisma.order.findMany({
       where,
       include: {
-        items: {
+        OrderItem: {
           include: {
-            product: true,
+            Product: true,
           },
         },
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -120,14 +120,14 @@ export async function POST(request: Request) {
         shippingEmail,
         shippingAddress,
         status: "PENDING",
-        items: {
+        OrderItem: {
           create: orderItems,
         },
       },
       include: {
-        items: {
+        OrderItem: {
           include: {
-            product: true,
+            Product: true,
           },
         },
       },

@@ -31,7 +31,7 @@ export async function GET() {
         createdAt: true,
         _count: {
           select: {
-            orders: true,
+            Order: true,
           },
         },
       },
