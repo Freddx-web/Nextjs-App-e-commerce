@@ -39,12 +39,12 @@ export async function GET(
     const order = await prisma.order.findUnique({
       where: { id },
       include: {
-        items: {
+        OrderItem: {
           include: {
-            product: true,
+            Product: true,
           },
         },
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -109,12 +109,12 @@ export async function PUT(
       where: { id },
       data: { status },
       include: {
-        items: {
+        OrderItem: {
           include: {
-            product: true,
+            Product: true,
           },
         },
-        user: {
+        User: {
           select: {
             id: true,
             name: true,

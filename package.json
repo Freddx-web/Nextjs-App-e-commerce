@@ -1,11 +1,18 @@
 {
-  "name": "nextjs-app-e-commerce",
+  "name": "my-app",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset",
+    "db:seed": "tsx scripts/seed.ts"
   },
   "devDependencies": {
     "@next/swc-wasm-nodejs": "13.5.1",
@@ -27,16 +34,19 @@
     "tailwindcss-animate": "1.0.7",
     "ts-node": "10.9.2",
     "tsx": "4.20.3",
-    "typescript": "5.2.2"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@auth/core": "^0.34.3",
+    "@auth/prisma-adapter": "^2.11.1",
     "@aws-sdk/client-s3": "^3.0.0",
     "@aws-sdk/s3-request-presigner": "^3.0.0",
     "@floating-ui/react": "0.26.0",
     "@headlessui/react": "1.7.18",
     "@hookform/resolvers": "3.9.0",
     "@neondatabase/serverless": "^1.0.2",
-    "@next-auth/prisma-adapter": "1.0.7",
+    "@next-auth/prisma-adapter": "^1.0.7",
+    "@prisma/config": "^7.5.0",
     "@radix-ui/react-accordion": "1.2.0",
     "@radix-ui/react-alert-dialog": "1.1.1",
     "@radix-ui/react-aspect-ratio": "1.1.0",
@@ -93,8 +103,8 @@
     "lodash": "4.17.21",
     "lucide-react": "0.446.0",
     "mapbox-gl": "1.13.3",
-    "next": "15.3.0",
-    "next-auth": "^4.24.11",
+    "next": "^15.5.12",
+    "next-auth": "^4.24.13",
     "next-swagger-doc": "^0.4.1",
     "next-themes": "0.3.0",
     "plotly.js": "2.35.3",

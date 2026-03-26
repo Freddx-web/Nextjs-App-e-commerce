@@ -3,15 +3,15 @@ import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { prisma } from '@/lib/db';
 
-// Initialize Stripe client
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-12-15.clover',
-});
-// Webhook secret from environment variables
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
 // Handle POST requests to the Stripe webhook endpoint
 export async function POST(request: Request) {
+  // Initialize Stripe client inside the function
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2026-02-25.clover',
+  });
+  
+  // Webhook secret from environment variables
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   // Read the raw body and signature from headers
   try {
     // Read raw body
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
           shippingAddress: metadata.shippingAddress || '',
           status: 'PROCESSING',
           stripePaymentId: session.payment_intent as string,
-          items: {
+          OrderItem: {
             create: orderItems,
           },
         },
