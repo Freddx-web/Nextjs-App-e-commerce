@@ -20,7 +20,7 @@ export async function GET(
     const product = await prisma.product.findUnique({
       where: { id },
       include: {
-        category: true,
+        Category: true,
       },
     });
     // Si no se encuentra el producto, devolver un error 404
@@ -72,7 +72,7 @@ export async function PUT(
         ...(stock !== undefined && { stock: parseInt(stock) }),
       },
       include: {
-        category: true,
+        Category: true,
       },
     });
     // Devolver el producto actualizado

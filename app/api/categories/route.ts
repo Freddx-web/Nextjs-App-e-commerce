@@ -87,7 +87,7 @@ export async function GET() {
       },
       include: {
         _count: {
-          select: { products: true },
+          select: { Product: true },
         },
       },
     });

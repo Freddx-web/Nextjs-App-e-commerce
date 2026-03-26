@@ -190,9 +190,9 @@ export async function GET() {
     const cartItems = await prisma.cartItem.findMany({
       where: { userId },
       include: {
-        product: {
+        Product: {
           include: {
-            category: true,
+            Category: true,
           },
         },
       },
@@ -252,9 +252,9 @@ export async function POST(request: Request) {
           quantity: existingItem.quantity + quantity,
         },
         include: {
-          product: {
+          Product: {
             include: {
-              category: true,
+              Category: true,
             },
           },
         },
@@ -267,9 +267,9 @@ export async function POST(request: Request) {
           quantity,
         },
         include: {
-          product: {
+          Product: {
             include: {
-              category: true,
+              Category: true,
             },
           },
         },
@@ -318,9 +318,9 @@ export async function PUT(request: Request) {
         quantity,
       },
       include: {
-        product: {
+        Product: {
           include: {
-            category: true,
+            Category: true,
           },
         },
       },

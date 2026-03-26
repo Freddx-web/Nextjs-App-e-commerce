@@ -122,7 +122,7 @@ export async function GET(request: Request) {
     const products = await prisma.product.findMany({
       where,
       include: {
-        category: true,
+        Category: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -172,7 +172,7 @@ export async function POST(request: Request) {
         stock: stock ? parseInt(stock) : 0,
       },
       include: {
-        category: true,
+        Category: true,
       },
     });
     // Retornar el producto creado como respuesta JSON
