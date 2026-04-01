@@ -16,6 +16,8 @@
     "prisma-dev": "prisma generate && npx prisma migrate reset && prisma migrate dev --name init"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.4.1",
+    "@next/eslint-plugin-next": "15.3.0",
     "@next/swc-wasm-nodejs": "13.5.1",
     "@prisma/client": "^6.19.2",
     "@types/node": "20.6.2",
