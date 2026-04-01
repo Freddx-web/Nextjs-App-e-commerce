@@ -25,7 +25,7 @@ interface CartItem {
 }
 // Main Component
 export default function CartPage() {
-  const { data: session, status } = useSession() || {};
+  const { status } = useSession() || {};
   const router = useRouter();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,8 @@ interface CartItem {
     id: string;
     name: string;
     price: number;
+    description?: string;
+    images?: string[];
   };
 }
 
@@ -47,24 +49,8 @@ export default function CheckoutPage() {
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
   const [isCustomAddress, setIsCustomAddress] = useState(false);
 
-  // Redirect unauthenticated users and fetch cart and addresses on authentication
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-      return;
-    }
-    // Fetch cart items and saved addresses when authenticated
-    if (status === 'authenticated') {
-      fetchCart();
-      fetchSavedAddresses();
-      fetchUserProfile();
-      setShippingEmail(session?.user?.email || '');
-      setShippingName(session?.user?.name || '');
-    }
-  }, [status, router, session]);
-
   // Function to fetch cart items
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     try { 
       const res = await fetch('/api/cart');
       if (res.ok) {
@@ -81,7 +67,7 @@ export default function CheckoutPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
 
   // Function to fetch user profile
   const fetchUserProfile = async () => {
@@ -102,7 +88,7 @@ export default function CheckoutPage() {
   };
 
   // Function to fetch saved addresses
-  const fetchSavedAddresses = async () => {
+  const fetchSavedAddresses = useCallback(async () => {
     try {
       const res = await fetch('/api/profile/addresses'); // Corrected endpoint
       if (res.ok) {
@@ -119,7 +105,23 @@ export default function CheckoutPage() {
       console.error('Error fetching saved addresses:', error);
       toast.error('Error al cargar direcciones guardadas');
     }
-  };
+  }, []);
+
+  // Redirect unauthenticated users and fetch cart and addresses on authentication
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+      return;
+    }
+    // Fetch cart items and saved addresses when authenticated
+    if (status === 'authenticated') {
+      fetchCart();
+      fetchSavedAddresses();
+      fetchUserProfile();
+      setShippingEmail(session?.user?.email || '');
+      setShippingName(session?.user?.name || '');
+    }
+  }, [status, router, session, fetchCart, fetchSavedAddresses]);
 
   // Handle address selection
   const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -145,10 +147,10 @@ export default function CheckoutPage() {
       sessionStorage.setItem('checkoutData', JSON.stringify({
         items: cartItems?.map?.(item => ({
           name: item?.product?.name ?? 'Producto',
-          description: (item?.product as any)?.description ?? '',
+          description: item?.product?.description ?? '',
           price: item?.product?.price ?? 0,
           quantity: item?.quantity ?? 1,
-          images: (item?.product as any)?.images ?? [],
+          images: item?.product?.images ?? [],
         })) ?? [],
         shippingName,
         shippingEmail,

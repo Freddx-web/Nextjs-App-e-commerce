@@ -17,7 +17,7 @@ export default async function AdminLayout({
     redirect('/login');
   }
   // Verificar si el usuario tiene rol de administrador
-  if ((session.user as any).role !== 'ADMIN') {
+  if (session.user.role !== 'ADMIN') {
     redirect('/');
   }
 

@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
+import type { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 //  Obtener Usuario del Administrador
@@ -17,7 +18,7 @@ export async function GET(
     // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario es administrador
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
@@ -62,7 +63,7 @@ export async function PUT(
     // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario es administrador
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
@@ -79,7 +80,7 @@ export async function PUT(
       );
     }
     // Preparar los datos para actualizar
-    const updateData: any = {};
+    const updateData: Prisma.UserUpdateInput = {};
     if (name !== undefined) updateData.name = name;
     if (email !== undefined) updateData.email = email;
     if (role !== undefined) updateData.role = role;
@@ -116,7 +117,7 @@ export async function DELETE(
     // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario es administrador
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }

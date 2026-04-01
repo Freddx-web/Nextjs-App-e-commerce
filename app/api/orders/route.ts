@@ -27,8 +27,8 @@ export async function GET() {
       );
     }
     // Obtener el ID y rol del usuario de la sesión
-    const userId = (session.user as any).id;
-    const userRole = (session.user as any).role;
+    const userId = session.user.id;
+    const userRole = session.user.role;
     // Construir la condición de búsqueda según el rol del usuario
     const where = userRole === "ADMIN" ? {} : { userId };
     // Buscar las órdenes
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
       );
     }
     // Obtener el ID del usuario de la sesión
-    const userId = (session.user as any).id;
+    const userId = session.user.id;
     const body = await request.json();
     const { shippingName, shippingEmail, shippingAddress, items } = body;
     // Validar los datos recibidos

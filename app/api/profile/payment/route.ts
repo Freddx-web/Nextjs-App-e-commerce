@@ -7,7 +7,20 @@ export const dynamic = "force-dynamic";
 
 // Mock payment methods storage since payment methods are not in the schema
 // In a real app, you would add a PaymentMethod model to the schema
-const paymentMethods: any[] = [];
+type PaymentMethod = {
+  id: string;
+  userId: string;
+  type: string;
+  brand: string;
+  last4: string;
+  expiryMonth: number;
+  expiryYear: number;
+  holderName: string;
+  isDefault: boolean;
+  createdAt: string;
+};
+
+const paymentMethods: PaymentMethod[] = [];
 // Example PaymentMethod structure:
 export async function GET() {
   // Fetch user session

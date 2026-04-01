@@ -51,7 +51,7 @@ export async function PUT(
     // Verificar la sesión del usuario
     const session = await getServerSession(authOptions);
     // Solo los administradores pueden actualizar productos
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
@@ -96,7 +96,7 @@ export async function DELETE(
     // Verificar la sesión del usuario
     const session = await getServerSession(authOptions);
     // Solo los administradores pueden eliminar productos
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }

@@ -15,7 +15,7 @@ export async function GET() {
     // Verificar sesión y rol de ADMIN
     const session = await getServerSession(authOptions);
     //console.log("Session:", session);
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     // Verificar sesión y rol de ADMIN
     const session = await getServerSession(authOptions);
     //console.log("Session:", session);
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }

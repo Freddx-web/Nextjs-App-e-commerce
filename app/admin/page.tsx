@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { DollarSign, Package, ShoppingCart, Users, TrendingUp } from 'lucide-react';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, Cell } from 'recharts';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 
 // Definición de tipos para las estadísticas
 interface Stats {
@@ -37,7 +37,7 @@ export default function AdminDashboard() {
       return;
     }
     if (status === 'authenticated') {
-      const userRole = (session?.user as any)?.role;
+      const userRole = session?.user?.role;
       if (userRole !== 'ADMIN') {
         router.push('/');
         return;

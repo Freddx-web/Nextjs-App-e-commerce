@@ -23,7 +23,7 @@ export async function PUT(
     // Verificar sesión y rol de usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario tiene rol de ADMIN
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
@@ -33,7 +33,7 @@ export async function PUT(
     const body = await request.json();
     const { name, description } = body;
     // Construir objeto de actualización
-    const updateData: any = {};
+    const updateData: { name?: string; description?: string; slug?: string } = {};
     // Actualizar nombre y slug si se proporciona un nuevo nombre
     if (name) {
       updateData.name = name;
@@ -72,7 +72,7 @@ export async function DELETE(
     // Verificar sesión y rol de usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario tiene rol de ADMIN
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }

@@ -9,6 +9,10 @@ const SwaggerUIComponent = dynamic(() => import('swagger-ui-react'), {
 
 import 'swagger-ui-react/swagger-ui.css';
 
+type SwaggerRequest = Record<string, unknown> & {
+  headers?: Record<string, string>;
+};
+
 export default function SwaggerUI() {
   const [spec, setSpec] = useState<string | object | undefined>(undefined);
   const [loading, setLoading] = useState(true);
@@ -68,10 +72,11 @@ export default function SwaggerUI() {
     <div className="container mx-auto p-4">
       <SwaggerUIComponent 
         spec={spec}
-        requestInterceptor={(request: any) => {
+        requestInterceptor={(request: SwaggerRequest) => {
           // Add authorization header if token is available
           const token = localStorage.getItem('next-auth.accessToken');
           if (token) {
+            request.headers = request.headers ?? {};
             request.headers.Authorization = `Bearer ${token}`;
           }
           return request;

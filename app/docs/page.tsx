@@ -18,7 +18,7 @@ async function checkAdminAccess() {
     redirect('/login?callbackUrl=/docs');
   }
   
-  const userRole = (session.user as any)?.role;
+  const userRole = session.user.role;
   if (userRole !== 'ADMIN') {
     redirect('/?error=access_denied');
   }

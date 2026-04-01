@@ -69,7 +69,7 @@ export async function deleteFromCloudinary(publicId: string): Promise<void> {
 
 export function getCloudinaryUrl(
   publicId: string,
-  transformation?: any
+  transformation?: Parameters<typeof cloudinary.url>[1]
 ): string {
   return cloudinary.url(publicId, transformation);
 }

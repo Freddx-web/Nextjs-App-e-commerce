@@ -127,7 +127,7 @@ export default function PaymentPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
       // Handle response
       if (!response.ok) {

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { Bell, Shield, Palette, Globe } from 'lucide-react';
+import { Bell, Shield, Palette } from 'lucide-react';
 
 // Define the shape of user settings
 interface UserSettings {
@@ -23,8 +22,6 @@ interface UserSettings {
 
 // Main Settings Page Component
 export default function SettingsPage() {
-  // Session data
-  const { data: session } = useSession();
   // State for user settings
   const [settings, setSettings] = useState<UserSettings>({
     emailNotifications: true,
@@ -60,7 +57,10 @@ export default function SettingsPage() {
     }
   };
   // Handle changes to settings
-  const handleSettingChange = (key: keyof UserSettings, value: any) => {
+  const handleSettingChange = <K extends keyof UserSettings>(
+    key: K,
+    value: UserSettings[K]
+  ) => {
     setSettings(prev => ({
       ...prev,
       [key]: value
@@ -289,7 +289,12 @@ export default function SettingsPage() {
             <select
               id="theme"
               value={settings.theme}
-              onChange={(e) => handleSettingChange('theme', e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === 'light' || value === 'dark' || value === 'system') {
+                  handleSettingChange('theme', value);
+                }
+              }}
               className="w-full p-2 border border-gray-300 rounded-md"
             >
               <option value="system">Sistema</option>

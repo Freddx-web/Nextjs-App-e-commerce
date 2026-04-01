@@ -94,6 +94,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
+import type { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 // Endpoint para obtener los productos
@@ -106,7 +107,7 @@ export async function GET(request: Request) {
     const categoryId = searchParams.get("categoryId");
     const search = searchParams.get("search");
     // Construir objeto 'where' para filtros dinámicos
-    const where: any = {};
+    const where: Prisma.ProductWhereInput = {};
     // Agregar filtro por categoría si se proporciona
     if (categoryId) {
       where.categoryId = categoryId;
@@ -145,7 +146,7 @@ export async function POST(request: Request) {
     // Obtener sesión del usuario
     const session = await getServerSession(authOptions);
     // Verificar si el usuario es administrador
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }

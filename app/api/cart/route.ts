@@ -185,7 +185,7 @@ export async function GET() {
       );
     }
     // Obtener el ID del usuario desde la sesión
-    const userId = (session.user as any).id;
+    const userId = session.user.id;
     // Buscar los items del carrito para el usuario
     const cartItems = await prisma.cartItem.findMany({
       where: { userId },
@@ -223,7 +223,7 @@ export async function POST(request: Request) {
       );
     }
     // Obtener el ID del usuario desde la sesión
-    const userId = (session.user as any).id;
+    const userId = session.user.id;
     const body = await request.json();
     const { productId, quantity } = body;
     // Validar datos de entrada
@@ -298,7 +298,7 @@ export async function PUT(request: Request) {
       );
     }
     // Obtener el ID del usuario desde la sesión
-    const userId = (session.user as any).id;
+    const userId = session.user.id;
     const body = await request.json();
     const { cartItemId, quantity } = body;
     // Validar datos de entrada
@@ -348,7 +348,7 @@ export async function DELETE(request: Request) {
       );
     }
     // Obtener el ID del usuario desde la sesión
-    const userId = (session.user as any).id;
+    const userId = session.user.id;
     const { searchParams } = new URL(request.url);
     const cartItemId = searchParams.get("cartItemId");
     // Validar datos de entrada

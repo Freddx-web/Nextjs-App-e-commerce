@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   try {
     // Parsear el cuerpo de la solicitud
     const body = await request.json();
-    const { email, password, name, phone } = body;
+    const { email, password, name } = body;
     // Validar datos requeridos
     if (!email || !password) {
       return NextResponse.json(

@@ -35,7 +35,7 @@ export default function AdminCategoriesPage() {
       return;
     }
     if (status === 'authenticated') {
-      const userRole = (session?.user as any)?.role;
+      const userRole = session?.user?.role;
       if (userRole !== 'ADMIN') {
         router.push('/');
         return;

@@ -14,7 +14,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }
@@ -31,7 +31,7 @@ export async function GET() {
     });
 
     // Calcular el total de ingresos
-    const totalRevenue = orders.reduce((sum: number, order: any) => sum + order.total, 0);
+    const totalRevenue = orders.reduce((sum: number, order: { total: number }) => sum + order.total, 0);
     // Total orders
     const totalOrders = await prisma.order.count();
     // Total products
@@ -54,7 +54,7 @@ export async function GET() {
     });
     // Fetch product details for top products
     const topProductsWithDetails = await Promise.all(
-      topProducts.map(async (item: any) => {
+      topProducts.map(async (item: { productId: string; _sum?: { quantity?: number | null } }) => {
         const product = await prisma.product.findUnique({
           where: { id: item.productId },
           select: {
@@ -96,7 +96,7 @@ export async function GET() {
     });
     // Formatear los resultados de ordersByStatus
     const formattedOrdersByStatus: { [key: string]: number } = {};
-    ordersByStatus.forEach((item: any) => {
+    ordersByStatus.forEach((item: { status: string; _count: { id: number } }) => {
       formattedOrdersByStatus[item.status] = item._count.id;
     });
     // Construir el objeto de estadísticas

@@ -7,7 +7,6 @@ export const dynamic = "force-dynamic";
 
 // Mock address storage since addresses are not in the schema
 // In a real app, you would add an Address model to the schema
-const addresses: any[] = [];
 // Endpoint para obtener las direcciones del usuario
 export async function GET() {
   // Verificar sesión del usuario

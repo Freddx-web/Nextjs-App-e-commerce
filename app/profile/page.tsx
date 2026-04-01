@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { User, Mail, Phone, MapPin, Calendar } from 'lucide-react';
+import { Mail, Phone, MapPin, Calendar } from 'lucide-react';
 // Definición de la interfaz del perfil de usuario
 interface UserProfile {
   id: string;

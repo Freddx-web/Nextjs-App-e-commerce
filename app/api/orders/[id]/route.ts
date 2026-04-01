@@ -33,8 +33,8 @@ export async function GET(
       );
     }
     // Obtener el ID y rol del usuario de la sesión
-    const userId = (session.user as any).id;
-    const userRole = (session.user as any).role;
+    const userId = session.user.id;
+    const userRole = session.user.role;
     // Buscar la orden por ID
     const order = await prisma.order.findUnique({
       where: { id },
@@ -88,7 +88,7 @@ export async function PUT(
     // Verificar si el usuario está autenticado y es ADMIN
     const session = await getServerSession(authOptions);
     // Si no está autenticado o no es ADMIN, devolver un error 401
-    if (!session || (session?.user as any)?.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "No autorizado" },
         { status: 401 }

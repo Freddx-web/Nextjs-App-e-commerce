@@ -14,7 +14,7 @@ export async function GET() {
     );
   }
   
-  const userRole = (session.user as any)?.role;
+  const userRole = session.user.role;
   if (userRole !== 'ADMIN') {
     return NextResponse.json(
       { error: 'Admin access required' },

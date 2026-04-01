@@ -4,6 +4,13 @@ import { auth } from '@/lib/auth';
 
 const prisma = new PrismaClient();
 
+type CheckoutDataItem = {
+  id?: string;
+  productId?: string;
+  quantity: number;
+  price: number;
+};
+
 export async function POST(request: NextRequest) {
   try {
     // Get the current session
@@ -47,15 +54,30 @@ export async function POST(request: NextRequest) {
     });
 
     // Create order items
-    const orderItems = checkoutData.items.map((item: any) => ({
-      orderId: order.id,
-      productId: item.id || item.productId,
-      quantity: item.quantity,
-      price: item.price,
-    }));
+    const checkoutItems = checkoutData.items as CheckoutDataItem[];
+    const orderItems = checkoutItems.map((item) => {
+      const productId = item.id ?? item.productId;
+      if (!productId) {
+        return null;
+      }
+
+      return {
+        orderId: order.id,
+        productId,
+        quantity: item.quantity,
+        price: item.price,
+      };
+    });
+
+    if (orderItems.some((x) => x === null)) {
+      return NextResponse.json(
+        { message: 'Uno o más items no tienen productId' },
+        { status: 400 }
+      );
+    }
 
     await prisma.orderItem.createMany({
-      data: orderItems,
+      data: orderItems.filter((x): x is NonNullable<typeof x> => x !== null),
     });
 
     // Create mobile payment transaction

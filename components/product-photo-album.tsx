@@ -29,16 +29,18 @@ export function ProductPhotoAlbum({ images, productName, initialIndex = 0 }: Pro
         setIsLightboxOpen(false);
         setIsZoomed(false);
       } else if (e.key === 'ArrowLeft') {
-        handlePrevious();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+        setIsZoomed(false);
       } else if (e.key === 'ArrowRight') {
-        handleNext();
+        setSelectedIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+        setIsZoomed(false);
       }
     };
     // Attach event listener
     window.addEventListener('keydown', handleKeyDown);
     // Cleanup event listener on unmount or when lightbox closes
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isLightboxOpen, selectedIndex]);
+  }, [isLightboxOpen, images.length]);
   // Handlers for navigation
   const handlePrevious = () => {
     setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));

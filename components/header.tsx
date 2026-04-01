@@ -5,10 +5,31 @@ import { useSession, signOut } from 'next-auth/react';
 import { ShoppingCart, User, LogOut, LayoutDashboard, FileText } from 'lucide-react';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
+interface CartItem {
+  id: string;
+  quantity: number;
+  product: {
+    id: string;
+    name: string;
+    price: number;
+  };
+}
+
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  role?: string;
+}
+
+interface Session {
+  user?: User;
+}
+
 // Header component
 export function Header() {
   // Get session data
-  const { data: session, status } = useSession() || {};
+  const { data: session, status } = useSession() as { data: Session | null; status: string };
   const [cartCount, setCartCount] = useState(0);
   const [mounted, setMounted] = useState(false);
   // Ensure component is mounted before rendering
@@ -37,7 +58,7 @@ export function Header() {
       if (res.ok) {
         const data = await res.json();
         // Sumar las cantidades de todos los items
-        const totalItems = data?.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0) || 0;
+        const totalItems = data?.reduce((sum: number, item: CartItem) => sum + (item.quantity || 0), 0) || 0;
         setCartCount(totalItems);
       }
     } catch (error) {
@@ -49,7 +70,7 @@ export function Header() {
     return null;
   }
   // Check if user is admin
-  const isAdmin = (session?.user as any)?.role === 'ADMIN';
+  const isAdmin = session?.user?.role === 'ADMIN';
   // Render header
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">

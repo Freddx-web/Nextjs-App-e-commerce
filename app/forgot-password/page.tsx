@@ -22,8 +22,9 @@ export default function ForgotPasswordPage() {
       await new Promise((res) => setTimeout(res, 1200));
       setSubmitted(true);
       toast.success('Si el correo existe, se ha enviado un enlace de recuperación');
-    } catch (error) {
-      toast.error('Error al enviar el correo de recuperación');
+    } catch {
+      console.error('Error requesting password reset:');
+      toast.error('Error al solicitar restablecimiento de contraseña');
     } finally {
       setLoading(false);
     }

@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Smartphone, Copy, CheckCircle, Receipt } from 'lucide-react';
+import { ArrowLeft, Copy, CheckCircle, Receipt } from 'lucide-react';
 import Image from 'next/image';
 
 export default function QRScanPage() {

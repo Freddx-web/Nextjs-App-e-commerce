@@ -24,7 +24,7 @@ interface Order {
 // Main Orders Page Component
 export default function OrdersPage() {
   // State and Hooks
-  const { data: session, status } = useSession() || {};
+  const { status } = useSession() || {};
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
