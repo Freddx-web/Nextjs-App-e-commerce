@@ -61,7 +61,7 @@ export default function CheckoutPage() {
       setShippingEmail(session?.user?.email || '');
       setShippingName(session?.user?.name || '');
     }
-  }, [status, router, session]);
+  }, [status, router, session, fetchCart, fetchSavedAddresses]);
 
   // Function to fetch cart items
   const fetchCart = async () => {
