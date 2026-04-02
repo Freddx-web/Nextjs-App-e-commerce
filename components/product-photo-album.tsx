@@ -38,7 +38,7 @@ export function ProductPhotoAlbum({ images, productName, initialIndex = 0 }: Pro
     window.addEventListener('keydown', handleKeyDown);
     // Cleanup event listener on unmount or when lightbox closes
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isLightboxOpen, selectedIndex]);
+  }, [isLightboxOpen, selectedIndex, handleNext, handlePrevious]);
   // Handlers for navigation
   const handlePrevious = () => {
     setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));

@@ -46,7 +46,7 @@ export default function OrderDetailPage() {
     if (status === 'authenticated' && params?.id) {
       fetchOrder();
     }
-  }, [status, params?.id, router]);
+  }, [status, params?.id, router, fetchOrder]);
   // Fetch order function
   const fetchOrder = async () => {
     try {
