@@ -42,7 +42,7 @@ export default function EditUserPage() {
       }
       fetchUser();
     }
-  }, [status, session, id, fetchUser, router]);
+  }, [status, session, id]);
   // Función para obtener el usuario desde la API
   const fetchUser = async () => {
     try { // Llamada a la API para obtener el usuario

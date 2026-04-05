@@ -35,7 +35,7 @@ export default function ProductDetailPage() {
     if (params?.id) {
       fetchProduct();
     }
-  }, [params?.id, fetchProduct]);
+  }, [params?.id]);
   // Fetch product from the API
   const fetchProduct = async () => {
     try {
