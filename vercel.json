@@ -3,5 +3,18 @@
   "outputDirectory": ".next",
   "framework": "nextjs",
   "installCommand": "npm install",
-  "devCommand": "npm run dev"
+  "devCommand": "npm run dev",
+  "build": {
+    "env": {
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  },
+  "functions": {
+    "app/**/*.ts": {
+      "runtime": "nodejs18.x"
+    },
+    "app/**/*.tsx": {
+      "runtime": "nodejs18.x"
+    }
+  }
 }
