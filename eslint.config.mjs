@@ -5,9 +5,9 @@ import reactHooks from "eslint-plugin-react-hooks";
 import next from "@next/eslint-plugin-next";
 import globals from "globals";
 
-export default tseslint.config(
+export default [
   js.configs.recommended,
-  tseslint.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     files: ["**/*.{js,mjs,cjs,ts,tsx}"],
     languageOptions: {
@@ -44,4 +44,4 @@ export default tseslint.config(
   {
     ignores: [".next/**", "out/**", "build/**", "node_modules/**", "next-env.d.ts"],
   }
-);
+];
