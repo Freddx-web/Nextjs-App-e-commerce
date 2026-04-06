@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
@@ -28,23 +28,8 @@ export default function EditUserPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  // Efecto para verificar la sesión y el rol del usuario
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-      return;
-    } // Verificar si el usuario es administrador
-    if (status === 'authenticated') {
-      const userRole = (session?.user as any)?.role;
-      if (userRole !== 'ADMIN') {
-        router.push('/');
-        return;
-      }
-      fetchUser();
-    }
-  }, [status, session, id]);
   // Función para obtener el usuario desde la API
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try { // Llamada a la API para obtener el usuario
       const res = await fetch(`/api/users/${id}`);
       if (res.ok) {
@@ -60,7 +45,22 @@ export default function EditUserPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, router]);
+  // Efecto para verificar la sesión y el rol del usuario
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+      return;
+    } // Verificar si el usuario es administrador
+    if (status === 'authenticated') {
+      const userRole = (session?.user as any)?.role;
+      if (userRole !== 'ADMIN') {
+        router.push('/');
+        return;
+      }
+      fetchUser();
+    }
+  }, [status, session, id, fetchUser, router]);
   // Función para actualizar el usuario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

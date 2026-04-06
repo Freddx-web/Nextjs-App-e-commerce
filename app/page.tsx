@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
@@ -32,28 +32,9 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
-  // Efectos para cargar categorías y productos
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-  // Efecto para cargar productos cuando cambian los filtros
-  useEffect(() => {
-    fetchProducts();
-  }, [selectedCategory, searchQuery]);
-  // Funciones para obtener datos de la API
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch('/api/categories');
-      if (res.ok) {
-        const data = await res.json();
-        setCategories(data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
- // Función para obtener productos con filtros
-  const fetchProducts = async () => {
+
+  // Función para obtener productos con filtros
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -70,7 +51,29 @@ export default function HomePage() {
     } finally {
       setLoading(false);
     }
+  }, [selectedCategory, searchQuery]);
+
+  // Efectos para cargar categorías y productos
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+  // Efecto para cargar productos cuando cambian los filtros
+  useEffect(() => {
+    fetchProducts();
+  }, [selectedCategory, searchQuery, fetchProducts]);
+  // Funciones para obtener datos de la API
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch('/api/categories');
+      if (res.ok) {
+        const data = await res.json();
+        setCategories(data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
   };
+
   // Renderizado del componente
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
