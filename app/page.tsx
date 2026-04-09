@@ -39,7 +39,7 @@ export default function HomePage() {
   // Efecto para cargar productos cuando cambian los filtros
   useEffect(() => {
     fetchProducts();
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, fetchProducts]);
   // Funciones para obtener datos de la API
   const fetchCategories = async () => {
     try {
