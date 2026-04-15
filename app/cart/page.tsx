@@ -13,12 +13,12 @@ import { motion } from 'framer-motion';
 interface CartItem {
   id: string;
   quantity: number;
-  product: {
+  Product: {
     id: string;
     name: string;
     price: number;
     images: string[];
-    category: {
+    Category: {
       name: string;
     };
   };
@@ -78,6 +78,7 @@ export default function CartPage() {
   // Remove item from cart
   const removeItem = async (cartItemId: string) => {
     try {
+      console.log('Attempting to remove cart item with ID:', cartItemId);
       // Optimistic UI update
       const res = await fetch(`/api/cart?cartItemId=${cartItemId}`, {
         method: 'DELETE',
@@ -87,7 +88,9 @@ export default function CartPage() {
         toast.success('Producto eliminado');
         fetchCart();
       } else {
-        toast.error('Error al eliminar producto');
+        const errorData = await res.json().catch(() => ({}));
+        console.error('Delete error response:', errorData);
+        toast.error(errorData.error || 'Error al eliminar producto');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -96,7 +99,7 @@ export default function CartPage() {
   };
   // Calculate total price
   const total = cartItems?.reduce?.(
-    (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
+    (sum, item) => sum + (item?.Product?.price ?? 0) * (item?.quantity ?? 0),
     0
   ) ?? 0;
   // Render loading state
@@ -149,10 +152,10 @@ export default function CartPage() {
                 >
                   <div className="flex gap-4">
                     <div className="relative h-24 w-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
-                      {item?.product?.images?.[0] ? (
+                      {item?.Product?.images?.[0] ? (
                         <Image
-                          src={item.product.images[0]}
-                          alt={item?.product?.name ?? ''}
+                          src={item.Product.images[0]}
+                          alt={item?.Product?.name ?? ''}
                           fill
                           className="object-cover"
                         />
@@ -165,13 +168,13 @@ export default function CartPage() {
 
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900">
-                        {item?.product?.name}
+                        {item?.Product?.name}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {item?.product?.category?.name}
+                        {item?.Product?.Category?.name}
                       </p>
                       <p className="text-lg font-bold text-[#60B5FF] mt-2">
-                        ${item?.product?.price?.toFixed?.(2) ?? '0.00'}
+                        ${item?.Product?.price?.toFixed?.(2) ?? '0.00'}
                       </p>
                     </div>
 

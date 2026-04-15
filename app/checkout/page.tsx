@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 interface CartItem {
   id: string;
   quantity: number;
-  product: {
+  Product: {
     id: string;
     name: string;
     price: number;
@@ -144,11 +144,13 @@ export default function CheckoutPage() {
       // Store checkout data in sessionStorage for payment page
       sessionStorage.setItem('checkoutData', JSON.stringify({
         items: cartItems?.map?.(item => ({
-          name: item?.product?.name ?? 'Producto',
-          description: (item?.product as any)?.description ?? '',
-          price: item?.product?.price ?? 0,
+          id: item?.Product?.id,
+          productId: item?.Product?.id,
+          name: item?.Product?.name ?? 'Producto',
+          description: (item?.Product as any)?.description ?? '',
+          price: item?.Product?.price ?? 0,
           quantity: item?.quantity ?? 1,
-          images: (item?.product as any)?.images ?? [],
+          images: (item?.Product as any)?.images ?? [],
         })) ?? [],
         shippingName,
         shippingEmail,
@@ -169,7 +171,7 @@ export default function CheckoutPage() {
 
   // Calculate total amount
   const total = cartItems?.reduce?.(
-    (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
+    (sum, item) => sum + (item?.Product?.price ?? 0) * (item?.quantity ?? 0),
     0
   ) ?? 0;
 
@@ -279,10 +281,10 @@ export default function CheckoutPage() {
               {cartItems?.map?.(item => (
                 <div key={item.id} className="flex justify-between text-gray-700">
                   <span>
-                    {item?.product?.name} x {item?.quantity}
+                    {item?.Product?.name} x {item?.quantity}
                   </span>
                   <span>
-                    ${((item?.product?.price ?? 0) * (item?.quantity ?? 0)).toFixed(2)}
+                    ${((item?.Product?.price ?? 0) * (item?.quantity ?? 0)).toFixed(2)}
                   </span>
                 </div>
               )) || null}

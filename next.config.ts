@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Ensure proper build handling
-  swcMinify: true,
   // Force static generation where possible
   experimental: {
     // Disable any experimental features that might cause export issues
