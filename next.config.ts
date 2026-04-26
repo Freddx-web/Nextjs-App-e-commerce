@@ -1,11 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Force static generation where possible
-  experimental: {
-    // Disable any experimental features that might cause export issues
-  },
-  // Ensure proper output directory
+  // Ensure proper output directory for Vercel
   distDir: '.next',
   // Handle build cleanup
   onDemandEntries: {
