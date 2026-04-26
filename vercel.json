@@ -11,10 +11,10 @@
   },
   "functions": {
     "app/**/*.ts": {
-      "runtime": "@vercel/node"
+      "runtime": "@vercel/node@3.0.0"
     },
     "app/**/*.tsx": {
-      "runtime": "@vercel/node"
+      "runtime": "@vercel/node@3.0.0"
     }
   }
 }
