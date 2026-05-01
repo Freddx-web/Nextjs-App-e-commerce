@@ -1,11 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Ensure proper output directory for Vercel
-  distDir: '.next',
-  // Explicitly disable static export
-  output: undefined,
-  // Handle build cleanup
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
