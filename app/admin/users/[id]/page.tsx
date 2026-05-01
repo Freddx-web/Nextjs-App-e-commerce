@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
@@ -28,24 +28,6 @@ export default function EditUserPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  // Función para obtener el usuario desde la API
-  const fetchUser = useCallback(async () => {
-    try { // Llamada a la API para obtener el usuario
-      const res = await fetch(`/api/users/${id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data);
-      } else {
-        toast.error('Error al cargar usuario');
-        router.push('/admin/users');
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      toast.error('Error al cargar usuario');
-    } finally {
-      setLoading(false);
-    }
-  }, [id, router]);
   // Efecto para verificar la sesión y el rol del usuario
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -61,6 +43,24 @@ export default function EditUserPage() {
       fetchUser();
     }
   }, [status, session, id, fetchUser, router]);
+  // Función para obtener el usuario desde la API
+  const fetchUser = async () => {
+    try { // Llamada a la API para obtener el usuario
+      const res = await fetch(`/api/users/${id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+      } else {
+        toast.error('Error al cargar usuario');
+        router.push('/admin/users');
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      toast.error('Error al cargar usuario');
+    } finally {
+      setLoading(false);
+    }
+  };
   // Función para actualizar el usuario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

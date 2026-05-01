@@ -1,4 +1,0 @@
-# Ignore build artifacts (but keep .next for Vercel deployment)
-out
-dist
-build

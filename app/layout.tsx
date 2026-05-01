@@ -33,7 +33,10 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        <script async src="https://apps.abacus.ai/chatllm/appllm-lib.js"></script>
+        <script 
+          src="https://apps.abacus.ai/chatllm/appllm-lib.js" 
+          async
+        ></script>
       </head>
       <body className={inter.className}>
         <Providers>

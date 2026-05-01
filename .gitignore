@@ -10,7 +10,7 @@ node_modules
 
 # workspaces 
 workspace.code-workspace
-README.md
+
 # Scripts
 /scripts/scripts.sql
 /script/Imágenes/

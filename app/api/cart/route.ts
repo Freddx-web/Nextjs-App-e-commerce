@@ -358,25 +358,6 @@ export async function DELETE(request: Request) {
         { status: 400 }
       );
     }
-    // Debug: Log the cart item ID and user ID
-    console.log("Attempting to delete cart item:", { cartItemId, userId });
-    
-    // First, check if the item exists
-    const existingItem = await prisma.cartItem.findUnique({
-      where: {
-        id: cartItemId,
-        userId,
-      },
-    });
-    
-    if (!existingItem) {
-      console.log("Cart item not found:", { cartItemId, userId });
-      return NextResponse.json(
-        { error: "Item no encontrado en el carrito" },
-        { status: 404 }
-      );
-    }
-    
     // Eliminar el item del carrito
     await prisma.cartItem.delete({
       where: {

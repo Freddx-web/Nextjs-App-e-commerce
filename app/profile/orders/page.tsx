@@ -168,13 +168,14 @@ export default function OrdersPage() {
                     <div className="space-y-3">
                       {selectedOrder.items.map((item) => (
                         <div key={item.id} className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-gray-200 rounded-md flex-shrink-0 relative">
+                          <div className="w-12 h-12 bg-gray-200 rounded-md flex-shrink-0">
                             {item.product.images[0] && (
                               <Image
                                 src={item.product.images[0]}
                                 alt={item.product.name}
-                                fill
-                                className="object-cover rounded-md"
+                                width={48}
+                                height={48}
+                                className="w-12 h-12 object-cover rounded-md"
                               />
                             )}
                           </div>

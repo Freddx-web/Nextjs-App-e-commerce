@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 interface CartItem {
   id: string;
   quantity: number;
-  Product: {
+  product: {
     id: string;
     name: string;
     price: number;
@@ -47,8 +47,24 @@ export default function CheckoutPage() {
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
   const [isCustomAddress, setIsCustomAddress] = useState(false);
 
+  // Redirect unauthenticated users and fetch cart and addresses on authentication
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+      return;
+    }
+    // Fetch cart items and saved addresses when authenticated
+    if (status === 'authenticated') {
+      fetchCart();
+      fetchSavedAddresses();
+      fetchUserProfile();
+      setShippingEmail(session?.user?.email || '');
+      setShippingName(session?.user?.name || '');
+    }
+  }, [status, router, session, fetchCart, fetchSavedAddresses]);
+
   // Function to fetch cart items
-  const fetchCart = useCallback(async () => {
+  const fetchCart = async () => {
     try { 
       const res = await fetch('/api/cart');
       if (res.ok) {
@@ -65,43 +81,7 @@ export default function CheckoutPage() {
     } finally {
       setLoading(false);
     }
-  }, [router]);
-
-  // Function to fetch saved addresses
-  const fetchSavedAddresses = useCallback(async () => {
-    try {
-      const res = await fetch('/api/profile/addresses'); // Corrected endpoint
-      if (res.ok) {
-        const data = await res.json();
-        setSavedAddresses(data || []);
-        // Pre-set with default address
-        const defaultAddr = data.find((addr: SavedAddress) => addr.isDefault);
-        if (defaultAddr) {
-          setSelectedAddressId(defaultAddr.id);
-          setShippingAddress(formatAddress(defaultAddr));
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching saved addresses:', error);
-      toast.error('Error al cargar direcciones guardadas');
-    }
-  }, []);
-
-  // Redirect unauthenticated users and fetch cart and addresses on authentication
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-      return;
-    }
-    // Fetch cart items and saved addresses when authenticated
-    if (status === 'authenticated') {
-      fetchCart();
-      fetchSavedAddresses();
-      fetchUserProfile();
-      setShippingEmail(session?.user?.email || '');
-      setShippingName(session?.user?.name || '');
-    }
-  }, [status, router, session, fetchCart, fetchSavedAddresses]);
+  };
 
   // Function to fetch user profile
   const fetchUserProfile = async () => {
@@ -119,6 +99,26 @@ export default function CheckoutPage() {
   // Function to format address
   const formatAddress = (addr: SavedAddress) => {
     return `${addr.street}, ${addr.city}, ${addr.postalCode}, ${addr.country}`;
+  };
+
+  // Function to fetch saved addresses
+  const fetchSavedAddresses = async () => {
+    try {
+      const res = await fetch('/api/profile/addresses'); // Corrected endpoint
+      if (res.ok) {
+        const data = await res.json();
+        setSavedAddresses(data || []);
+        // Pre-set with default address
+        const defaultAddr = data.find((addr: SavedAddress) => addr.isDefault);
+        if (defaultAddr) {
+          setSelectedAddressId(defaultAddr.id);
+          setShippingAddress(formatAddress(defaultAddr));
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching saved addresses:', error);
+      toast.error('Error al cargar direcciones guardadas');
+    }
   };
 
   // Handle address selection
@@ -144,13 +144,11 @@ export default function CheckoutPage() {
       // Store checkout data in sessionStorage for payment page
       sessionStorage.setItem('checkoutData', JSON.stringify({
         items: cartItems?.map?.(item => ({
-          id: item?.Product?.id,
-          productId: item?.Product?.id,
-          name: item?.Product?.name ?? 'Producto',
-          description: (item?.Product as any)?.description ?? '',
-          price: item?.Product?.price ?? 0,
+          name: item?.product?.name ?? 'Producto',
+          description: (item?.product as any)?.description ?? '',
+          price: item?.product?.price ?? 0,
           quantity: item?.quantity ?? 1,
-          images: (item?.Product as any)?.images ?? [],
+          images: (item?.product as any)?.images ?? [],
         })) ?? [],
         shippingName,
         shippingEmail,
@@ -171,7 +169,7 @@ export default function CheckoutPage() {
 
   // Calculate total amount
   const total = cartItems?.reduce?.(
-    (sum, item) => sum + (item?.Product?.price ?? 0) * (item?.quantity ?? 0),
+    (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
     0
   ) ?? 0;
 
@@ -281,10 +279,10 @@ export default function CheckoutPage() {
               {cartItems?.map?.(item => (
                 <div key={item.id} className="flex justify-between text-gray-700">
                   <span>
-                    {item?.Product?.name} x {item?.quantity}
+                    {item?.product?.name} x {item?.quantity}
                   </span>
                   <span>
-                    ${((item?.Product?.price ?? 0) * (item?.quantity ?? 0)).toFixed(2)}
+                    ${((item?.product?.price ?? 0) * (item?.quantity ?? 0)).toFixed(2)}
                   </span>
                 </div>
               )) || null}

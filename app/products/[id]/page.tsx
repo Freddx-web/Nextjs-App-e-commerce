@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
@@ -30,9 +30,14 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-
+  // Fetch product details when component mounts or params.id changes
+  useEffect(() => {
+    if (params?.id) {
+      fetchProduct();
+    }
+  }, [params?.id, fetchProduct]);
   // Fetch product from the API
-  const fetchProduct = useCallback(async () => {
+  const fetchProduct = async () => {
     try {
       const res = await fetch(`/api/products/${params?.id}`);
       if (res.ok) {
@@ -48,15 +53,7 @@ export default function ProductDetailPage() {
     } finally {
       setLoading(false);
     }
-  }, [params?.id, router]);
-
-  // Fetch product details when component mounts or params.id changes
-  useEffect(() => {
-    if (params?.id) {
-      fetchProduct();
-    }
-  }, [params?.id, fetchProduct]);
-
+  };
   // Handle adding product to cart
   const addToCart = async () => {
     if (!session) {

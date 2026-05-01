@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -37,9 +37,18 @@ export default function OrderDetailPage() {
   const { status } = useSession() || {};
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-
+  // Fetch order on mount or when params change
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+      return;
+    }
+    if (status === 'authenticated' && params?.id) {
+      fetchOrder();
+    }
+  }, [status, params?.id, router, fetchOrder]);
   // Fetch order function
-  const fetchOrder = useCallback(async () => {
+  const fetchOrder = async () => {
     try {
       const res = await fetch(`/api/orders/${params?.id}`);
       if (res.ok) {
@@ -55,19 +64,7 @@ export default function OrderDetailPage() {
     } finally {
       setLoading(false);
     }
-  }, [params?.id, router]);
-
-  // Fetch order on mount or when params change
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-      return;
-    }
-    if (status === 'authenticated' && params?.id) {
-      fetchOrder();
-    }
-  }, [status, params?.id, router, fetchOrder]);
-
+  };
   // Status badge helper
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {

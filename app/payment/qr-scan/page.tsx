@@ -35,7 +35,7 @@ export default function QRScanPage() {
   const bank = 'Banco de Venezuela';
   const bankAccount = '0134-0000-0000-0000';
   const accountHolder = 'GuitarShop C.A';
-  const amount = `$${totalAmount}`;
+  const amount = `Bs. ${totalAmount}`;
 
   // Handle copy to clipboard for payment details
   const handleCopy = (text: string) => {
