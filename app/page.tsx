@@ -38,8 +38,27 @@ export default function HomePage() {
   }, []);
   // Efecto para cargar productos cuando cambian los filtros
   useEffect(() => {
+    // Función para obtener productos con filtros
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (selectedCategory) params.append('categoryId', selectedCategory);
+        if (searchQuery) params.append('search', searchQuery);
+
+        const res = await fetch(`/api/products?${params.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          setProducts(data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchProducts();
-  }, [selectedCategory, searchQuery, fetchProducts]);
+  }, [selectedCategory, searchQuery]);
   // Funciones para obtener datos de la API
   const fetchCategories = async () => {
     try {
@@ -50,25 +69,6 @@ export default function HomePage() {
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
-    }
-  };
- // Función para obtener productos con filtros
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (selectedCategory) params.append('categoryId', selectedCategory);
-      if (searchQuery) params.append('search', searchQuery);
-
-      const res = await fetch(`/api/products?${params.toString()}`);
-      if (res.ok) {
-        const data = await res.json();
-        setProducts(data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
     }
   };
   // Renderizado del componente

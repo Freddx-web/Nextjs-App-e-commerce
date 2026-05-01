@@ -40,27 +40,27 @@ export default function EditUserPage() {
         router.push('/');
         return;
       }
+      // Función para obtener el usuario desde la API
+      const fetchUser = async () => {
+        try { // Llamada a la API para obtener el usuario
+          const res = await fetch(`/api/users/${id}`);
+          if (res.ok) {
+            const data = await res.json();
+            setUser(data);
+          } else {
+            toast.error('Error al cargar usuario');
+            router.push('/admin/users');
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error);
+          toast.error('Error al cargar usuario');
+        } finally {
+          setLoading(false);
+        }
+      };
       fetchUser();
     }
-  }, [status, session, id, fetchUser, router]);
-  // Función para obtener el usuario desde la API
-  const fetchUser = async () => {
-    try { // Llamada a la API para obtener el usuario
-      const res = await fetch(`/api/users/${id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data);
-      } else {
-        toast.error('Error al cargar usuario');
-        router.push('/admin/users');
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      toast.error('Error al cargar usuario');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [status, session, id, router]);
   // Función para actualizar el usuario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

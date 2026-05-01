@@ -47,6 +47,11 @@ export default function CheckoutPage() {
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
   const [isCustomAddress, setIsCustomAddress] = useState(false);
 
+  // Function to format address
+  const formatAddress = (addr: SavedAddress) => {
+    return `${addr.street}, ${addr.city}, ${addr.postalCode}, ${addr.country}`;
+  };
+
   // Redirect unauthenticated users and fetch cart and addresses on authentication
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -55,71 +60,66 @@ export default function CheckoutPage() {
     }
     // Fetch cart items and saved addresses when authenticated
     if (status === 'authenticated') {
+      // Function to fetch cart items
+      const fetchCart = async () => {
+        try { 
+          const res = await fetch('/api/cart');
+          if (res.ok) {
+            const data = await res.json();
+            setCartItems(data || []);
+            if (data?.length === 0) {
+              toast.error('Tu carrito está vacío');
+              router.push('/cart');
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+          toast.error('Error al cargar el carrito');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      // Function to fetch user profile
+      const fetchUserProfile = async () => {
+        try {
+          const res = await fetch('/api/profile');
+          if (res.ok) {
+            const data = await res.json();
+            setShippingPhone(data.phone || '');
+          }
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+        }
+      };
+
+      // Function to fetch saved addresses
+      const fetchSavedAddresses = async () => {
+        try {
+          const res = await fetch('/api/profile/addresses'); // Corrected endpoint
+          if (res.ok) {
+            const data = await res.json();
+            setSavedAddresses(data || []);
+            // Pre-set with default address
+            const defaultAddr = data.find((addr: SavedAddress) => addr.isDefault);
+            if (defaultAddr) {
+              setSelectedAddressId(defaultAddr.id);
+              setShippingAddress(formatAddress(defaultAddr));
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching saved addresses:', error);
+          toast.error('Error al cargar direcciones guardadas');
+        }
+      };
+
       fetchCart();
       fetchSavedAddresses();
       fetchUserProfile();
       setShippingEmail(session?.user?.email || '');
       setShippingName(session?.user?.name || '');
     }
-  }, [status, router, session, fetchCart, fetchSavedAddresses]);
-
-  // Function to fetch cart items
-  const fetchCart = async () => {
-    try { 
-      const res = await fetch('/api/cart');
-      if (res.ok) {
-        const data = await res.json();
-        setCartItems(data || []);
-        if (data?.length === 0) {
-          toast.error('Tu carrito está vacío');
-          router.push('/cart');
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching cart:', error);
-      toast.error('Error al cargar el carrito');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Function to fetch user profile
-  const fetchUserProfile = async () => {
-    try {
-      const res = await fetch('/api/profile');
-      if (res.ok) {
-        const data = await res.json();
-        setShippingPhone(data.phone || '');
-      }
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-    }
-  };
-
-  // Function to format address
-  const formatAddress = (addr: SavedAddress) => {
-    return `${addr.street}, ${addr.city}, ${addr.postalCode}, ${addr.country}`;
-  };
-
-  // Function to fetch saved addresses
-  const fetchSavedAddresses = async () => {
-    try {
-      const res = await fetch('/api/profile/addresses'); // Corrected endpoint
-      if (res.ok) {
-        const data = await res.json();
-        setSavedAddresses(data || []);
-        // Pre-set with default address
-        const defaultAddr = data.find((addr: SavedAddress) => addr.isDefault);
-        if (defaultAddr) {
-          setSelectedAddressId(defaultAddr.id);
-          setShippingAddress(formatAddress(defaultAddr));
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching saved addresses:', error);
-      toast.error('Error al cargar direcciones guardadas');
-    }
-  };
+  }, [status, router, session]);
 
   // Handle address selection
   const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

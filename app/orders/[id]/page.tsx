@@ -44,27 +44,27 @@ export default function OrderDetailPage() {
       return;
     }
     if (status === 'authenticated' && params?.id) {
+      // Fetch order function
+      const fetchOrder = async () => {
+        try {
+          const res = await fetch(`/api/orders/${params?.id}`);
+          if (res.ok) {
+            const data = await res.json();
+            setOrder(data);
+          } else {
+            toast.error('Orden no encontrada');
+            router.push('/orders');
+          }
+        } catch (error) {
+          console.error('Error fetching order:', error);
+          toast.error('Error al cargar la orden');
+        } finally {
+          setLoading(false);
+        }
+      };
       fetchOrder();
     }
-  }, [status, params?.id, router, fetchOrder]);
-  // Fetch order function
-  const fetchOrder = async () => {
-    try {
-      const res = await fetch(`/api/orders/${params?.id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setOrder(data);
-      } else {
-        toast.error('Orden no encontrada');
-        router.push('/orders');
-      }
-    } catch (error) {
-      console.error('Error fetching order:', error);
-      toast.error('Error al cargar la orden');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [status, params?.id, router]);
   // Status badge helper
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {

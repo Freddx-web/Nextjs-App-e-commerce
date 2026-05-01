@@ -33,27 +33,27 @@ export default function ProductDetailPage() {
   // Fetch product details when component mounts or params.id changes
   useEffect(() => {
     if (params?.id) {
+      // Fetch product from the API
+      const fetchProduct = async () => {
+        try {
+          const res = await fetch(`/api/products/${params?.id}`);
+          if (res.ok) {
+            const data = await res.json();
+            setProduct(data);
+          } else {
+            toast.error('Producto no encontrado');
+            router.push('/');
+          }
+        } catch (error) {
+          console.error('Error fetching product:', error);
+          toast.error('Error al cargar producto');
+        } finally {
+          setLoading(false);
+        }
+      };
       fetchProduct();
     }
-  }, [params?.id, fetchProduct]);
-  // Fetch product from the API
-  const fetchProduct = async () => {
-    try {
-      const res = await fetch(`/api/products/${params?.id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setProduct(data);
-      } else {
-        toast.error('Producto no encontrado');
-        router.push('/');
-      }
-    } catch (error) {
-      console.error('Error fetching product:', error);
-      toast.error('Error al cargar producto');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [params?.id, router]);
   // Handle adding product to cart
   const addToCart = async () => {
     if (!session) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,6 +19,16 @@ export function ProductPhotoAlbum({ images, productName, initialIndex = 0 }: Pro
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
 
+  // Handlers for navigation
+  const handlePrevious = useCallback(() => {
+    setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+    setIsZoomed(false);
+  }, [images.length]);
+  // Handler for next image
+  const handleNext = useCallback(() => {
+    setSelectedIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+    setIsZoomed(false);
+  }, [images.length]);
   // Handle keyboard navigation
   useEffect(() => {
     // Only add event listener when lightbox is open
@@ -39,16 +49,6 @@ export function ProductPhotoAlbum({ images, productName, initialIndex = 0 }: Pro
     // Cleanup event listener on unmount or when lightbox closes
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isLightboxOpen, selectedIndex, handleNext, handlePrevious]);
-  // Handlers for navigation
-  const handlePrevious = () => {
-    setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
-    setIsZoomed(false);
-  };
-  // Handler for next image
-  const handleNext = () => {
-    setSelectedIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
-    setIsZoomed(false);
-  };
   // Open lightbox at specific index
   const openLightbox = (index: number) => {
     setSelectedIndex(index);
